@@ -33,7 +33,7 @@ function LoginPage() {
         console.log('JWT token', response.data.authToken);
         storeToken(response.data.authToken)
         authenticateUser()
-        navigate('/');                             // <== ADD      
+        navigate('/agency-dashboard');                             // <== ADD      
       })
       .catch((error) => {
         const errorDescription = error.response.data.message;
@@ -42,12 +42,34 @@ function LoginPage() {
   };
 
   return (
-    <div className="LoginPage">
-        
-        <img src={E3logo} />
-        <h1>Please Login</h1>
+    <div className="login-container">
+      <h2>Login</h2>
+      <form onSubmit={handleLoginSubmit} className="login-form">
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          name="email"
+          value={email}
+          onChange={handleEmail}
+          required
+        />
 
+        <label htmlFor="password">Password</label>
+        <input
+          type="password"
+          name="password"
+          value={password}
+          onChange={handlePassword}
+          required
+        />
 
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+        <button type="submit">Log In</button>
+      </form>
+      <p>
+        Don't have an account? <Link to="/signup">Sign Up</Link>
+      </p>
     </div>
   )
 }

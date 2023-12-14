@@ -5,28 +5,33 @@ const getToken = () => {
   return localStorage.getItem("authToken");
 };
 
-export const get = (route, isE3 = false, isClientOwner = false) => {
+const createHeaders = (isE3 = false, isSalesCoach = false) => {
   const token = getToken();
-  const headers = { Authorization: `Bearer ${token}` };
+  const headers = {};
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
 
   if (isE3) {
+    headers["X-User-Role"] = "E3";
+  } else if (isSalesCoach) {
+    headers["X-User-Role"] = "SalesCoach";
   }
-  if (isClientOwner) {
-  }
+
+  return headers;
+};
+
+export const get = (route, isE3 = false, isSalesCoach = false) => {
+  const headers = createHeaders(isE3, isSalesCoach);
 
   return axios.get(SERVER_URL + route, {
     headers: headers,
   });
 };
 
-export const post = (route, body, isE3 = false, isClientOwner = false) => {
-  const token = getToken();
-  const headers = { Authorization: `Bearer ${token}` };
-
-  if (isE3) {
-  }
-  if (isClientOwner) {
-  }
+export const post = (route, body, isE3 = false, isSalesCoach = false) => {
+  const headers = createHeaders(isE3, isSalesCoach);
 
   return axios.post(SERVER_URL + route, body, {
     headers: headers,
