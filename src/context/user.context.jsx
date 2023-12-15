@@ -1,33 +1,38 @@
+import { useState, createContext, useContext, useEffect } from "react";
+import { AuthContext } from "./auth.context"; 
+import { get } from "../services/authService";// Import AuthContext if needed
 
-import { useState, useEffect, createContext } from "react";
-import { useNavigate } from "react-router-dom";
-
-import { get } from "../services/authService";
-
-const UserContext = createContext()
+const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState(null);
+  const { isLoggedIn } = useContext(AuthContext); // Use AuthContext to check if user is logged in
 
-    const [users, setUsers] = useState([])
-
-    const getUsers = () => {
-
-        get('/users')
-            .then((response) => {
-                console.log("Users", response.data)
-                setUsers(response.data)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-
+  // Function to fetch and set the current user's data
+  const fetchAndSetCurrentUser = () => {
+    if (isLoggedIn) {
+      // Assuming you have an endpoint to fetch the current user's data
+      get('/users/current')
+        .then((response) => {
+          console.log("Current User", response.data);
+          setCurrentUser(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
+  };
 
-    return (
-        <UserContext.Provider value={{ users, getUsers, setUsers}}>
-            {children}
-        </UserContext.Provider>
-    )
-}
+  // Fetch current user's data when the user logs in
+  useEffect(() => {
+    fetchAndSetCurrentUser();
+  }, [isLoggedIn]);
 
-export { UserContext, UserProvider }
+  return (
+    <UserContext.Provider value={{ currentUser, setCurrentUser }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+export { UserContext, UserProvider };

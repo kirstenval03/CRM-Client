@@ -29,13 +29,21 @@ const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Agency Dashboard");
   
-    const { user } = useContext(UserContext);
+    const { currentUser } = useContext(UserContext); 
     const { logOutUser } = useContext(AuthContext);
   
     const handleLogout = () => {
       logOutUser(); // Calls the logout function from AuthContext
     };
-  
+
+    const getCapitalizedRole = () => {
+        if (currentUser && currentUser.role) {
+          return currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
+        }
+        return "Role"; // Default role or any placeholder text
+      };
+
+      
     // Component for each menu item
     const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
       return (
@@ -102,7 +110,7 @@ const Sidebar = () => {
             )}
           </MenuItem>
 
-          {!isCollapsed && (
+          {!isCollapsed && currentUser && (
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center">
                 <img
@@ -120,10 +128,10 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Kirsten Valdez
+                  {currentUser.firstName } {currentUser.lastName} {/* Display user's name */}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  E3 Admin
+                  {getCapitalizedRole()}
                 </Typography>
               </Box>
             </Box>
