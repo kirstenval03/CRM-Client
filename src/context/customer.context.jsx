@@ -1,5 +1,6 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
+import { SERVER_URL } from '../services/SERVER_URL'; // Adjust the import path as needed
 
 const CustomerContext = createContext();
 
@@ -13,7 +14,7 @@ export function CustomerProvider({ children }) {
     // Fetch all customers
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get('/customer'); // Adjust the endpoint as needed
+            const response = await axios.get(`${SERVER_URL}/customer`);
             setCustomers(response.data);
         } catch (error) {
             console.error('Error fetching customers:', error);
@@ -23,7 +24,7 @@ export function CustomerProvider({ children }) {
     // Import customers from Google Sheets
     const importFromGoogleSheets = async () => {
         try {
-            await axios.get('/api/customers/import-from-google-sheets');
+            await axios.get(`${SERVER_URL}/customer/import-from-google-sheets`);
             fetchCustomers(); // Optionally refetch customers after import
         } catch (error) {
             console.error('Error importing from Google Sheets:', error);
@@ -45,4 +46,3 @@ export function CustomerProvider({ children }) {
         </CustomerContext.Provider>
     );
 }
-

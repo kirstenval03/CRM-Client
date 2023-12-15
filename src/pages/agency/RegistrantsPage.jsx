@@ -9,8 +9,15 @@ const CustomersPage = () => {
         fetchCustomers();
     }, []);
 
+    // Debugging: Log the customers array
+    useEffect(() => {
+        console.log('Fetched Customers:', customers);
+    }, [customers]);
+
     return (
+        
         <div style={{ margin: '20px' }}>
+            <h1> WTB 2.0 - Registrants</h1>
             <Button variant="contained" color="primary" onClick={importFromGoogleSheets}>
                 Import from Google Sheets
             </Button>
@@ -25,7 +32,7 @@ const CustomersPage = () => {
                             <TableCell>VIP</TableCell>
                             <TableCell>Ticket Revenue</TableCell>
                             <TableCell>Date</TableCell>
-                            <TableCell>UTM SOURCE</TableCell>
+                            <TableCell>UTM Source</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -35,10 +42,10 @@ const CustomersPage = () => {
                                 <TableCell>{customer.lastName}</TableCell>
                                 <TableCell>{customer.email}</TableCell>
                                 <TableCell>{customer.phone}</TableCell>
+                                <TableCell>{customer.vip ? 'Yes' : 'No'}</TableCell> {/* Convert Boolean to text */}
                                 <TableCell>{customer.revenue}</TableCell>
                                 <TableCell>{customer.date}</TableCell>
                                 <TableCell>{customer.utmSource}</TableCell>
-                                
                             </TableRow>
                         ))}
                     </TableBody>
