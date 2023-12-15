@@ -12,6 +12,7 @@ import AgencyDashboard from "./pages/agency/agencyDashPage";
 import TeamMembers from "./pages/agency/TeamMembers";
 
 import Sidebar from "./pages/global/Sidebar";
+import Topbar from "./pages/global/Topbar";
 
 function App() {
   const getToken = () => {
@@ -23,6 +24,7 @@ function App() {
       <div className="app">
         <Sidebar />
         <main className="content">
+        <Topbar/>
           <Outlet />
         </main>
       </div>
@@ -32,7 +34,12 @@ function App() {
   };
 
   const NotLoggedIn = () => {
-    return !getToken() ? <Outlet /> : <Navigate to="/" />;
+    return !getToken() ? 
+    <div>
+      <Topbar/>
+    <Outlet />
+     </div>
+    : <Navigate to="/" />;
   };
 
   const [theme, colorMode] = useMode();
