@@ -48,7 +48,7 @@ function AuthProvider({ children }) {
     removeToken();
 
     authenticateUser();
-    navigate("/");
+    navigate("/login");
   };
 
   useEffect(() => {

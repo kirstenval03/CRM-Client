@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../../context/auth.context";
+import { UserContext } from "../../context/user.context";
 
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
@@ -28,6 +29,7 @@ const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Agency Dashboard");
   
+    const { user } = useContext(UserContext);
     const { logOutUser } = useContext(AuthContext);
   
     const handleLogout = () => {
