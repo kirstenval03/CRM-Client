@@ -1,10 +1,10 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataTeam } from "../../data/mockData";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
+import { teamData } from "../../data/teamData";
+import LockOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
+
 import Header from "../../components/Header";
 
 const TeamMembers = () => {
@@ -15,6 +15,12 @@ const TeamMembers = () => {
       {
         field: "name",
         headerName: "Name",
+        flex: 1,
+        cellClassName: "name-column--cell",
+      },
+      {
+        field: "role",
+        headerName: "Position",
         flex: 1,
         cellClassName: "name-column--cell",
       },
@@ -37,7 +43,7 @@ const TeamMembers = () => {
         renderCell: ({ row: { access } }) => {
           return (
             <Box
-              width="60%"
+              width="100%"
               m="0 auto"
               p="5px"
               display="flex"
@@ -51,10 +57,10 @@ const TeamMembers = () => {
               }
               borderRadius="4px"
             >
-              {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-              {access === "manager" && <SecurityOutlinedIcon />}
-              {access === "user" && <LockOpenOutlinedIcon />}
-              <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
+              
+              {access === "Admin" && <SecurityOutlinedIcon />}
+              {access === "Restricted" && <LockOutlinedIcon />}
+              <Typography color={colors.grey[100]} sx={{ ml: "3px" }}>
                 {access}
               </Typography>
             </Box>
@@ -96,7 +102,7 @@ const TeamMembers = () => {
             },
           }}
         >
-          <DataGrid checkboxSelection rows={mockDataTeam} columns={columns} />
+          <DataGrid checkboxSelection rows={teamData} columns={columns} />
         </Box>
       </Box>
     );
