@@ -153,6 +153,7 @@ const Sidebar = () => {
                         <Item title="Event Dashboard" to="/event-dashboard" icon={<DashboardIcon />} selected={selected} setSelected={setSelected} />
                         <Item title="Event Information" to="/event-name" icon={<EventNoteOutlinedIcon />} selected={selected} setSelected={setSelected} />
                         <Item title="Registrants" to="/customers" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
+                        <Item title="Leads" to="/leads" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
                         <Item title="Analytics" to="/analytics" icon={<AnalyticsOutlinedIcon />} selected={selected} setSelected={setSelected} />
                         <Item title="Event Links" to="/event-links" icon={<LinkOutlinedIcon />} selected={selected} setSelected={setSelected} />
                         <Item title="Profile Settings" to="/profile-settings" icon={<SettingsOutlinedIcon />} selected={selected} setSelected={setSelected} />

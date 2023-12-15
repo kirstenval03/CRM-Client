@@ -11,6 +11,7 @@ import HomePage from "./pages/Home";
 import AgencyDashboard from "./pages/agency/agencyDashPage";
 import TeamMembers from "./pages/agency/TeamMembers";
 import RegistrantsPage from "./pages/agency/RegistrantsPage";
+import LeadsPage from "./pages/coaches/LeadsPage";
 
 import Sidebar from "./pages/global/Sidebar";
 import Topbar from "./pages/global/Topbar";
@@ -60,6 +61,7 @@ function App() {
             <Route path="/agency-dashboard" element={<AgencyDashboard />} />
             <Route path="/team-members" element={<TeamMembers />} />
             <Route path="/customers" element={<RegistrantsPage/>}/>
+            <Route path="/leads" element={<LeadsPage/>}/>
 
             {/* ... other routes ... */}
           </Route>
