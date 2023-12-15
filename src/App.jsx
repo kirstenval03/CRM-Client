@@ -10,6 +10,7 @@ import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/Home";
 import AgencyDashboard from "./pages/agency/agencyDashPage";
 import TeamMembers from "./pages/agency/TeamMembers";
+import RegistrantsPage from "./pages/agency/RegistrantsPage";
 
 import Sidebar from "./pages/global/Sidebar";
 import Topbar from "./pages/global/Topbar";
@@ -58,6 +59,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/agency-dashboard" element={<AgencyDashboard />} />
             <Route path="/team-members" element={<TeamMembers />} />
+            <Route path="/customers" element={<RegistrantsPage/>}/>
 
             {/* ... other routes ... */}
           </Route>

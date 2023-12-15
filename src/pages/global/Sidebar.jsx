@@ -3,6 +3,8 @@ import { AuthContext } from "../../context/auth.context";
 import { UserContext } from "../../context/user.context";
 import { useNavigate } from 'react-router-dom'; 
 import { Link } from "react-router-dom";
+import defUserImage from '../../assets/defUser.png';
+
 
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
@@ -118,12 +120,13 @@ const Sidebar = () => {
                         <Box mb="25px">
                             <Box display="flex" justifyContent="center" alignItems="center">
                                 <img
-                                    alt="profile-user"
+                                    alt="p"
                                     width="100px"
                                     height="100px"
-                                    src={`../../assets/kirstenProfilePic.png`}
+                                    src={defUserImage}
                                     style={{ cursor: "pointer", borderRadius: "50%" }}
                                 />
+                                
                             </Box>
                             <Box textAlign="center">
                                 <Typography
@@ -149,7 +152,7 @@ const Sidebar = () => {
                         <Item title="Event History" to="/event-history" icon={<HistoryOutlinedIcon />} selected={selected} setSelected={setSelected} />
                         <Item title="Event Dashboard" to="/event-dashboard" icon={<DashboardIcon />} selected={selected} setSelected={setSelected} />
                         <Item title="Event Information" to="/event-name" icon={<EventNoteOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="Customers" to="/customers" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
+                        <Item title="Registrants" to="/customers" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
                         <Item title="Analytics" to="/analytics" icon={<AnalyticsOutlinedIcon />} selected={selected} setSelected={setSelected} />
                         <Item title="Event Links" to="/event-links" icon={<LinkOutlinedIcon />} selected={selected} setSelected={setSelected} />
                         <Item title="Profile Settings" to="/profile-settings" icon={<SettingsOutlinedIcon />} selected={selected} setSelected={setSelected} />
