@@ -8,6 +8,7 @@ const LeadsPage = () => {
     const [page, setPage] = useState(1);
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('');
+    const [colorFilter, setColorFilter] = useState(''); 
     const rowsPerPage = 10;
 
     useEffect(() => {
@@ -27,6 +28,13 @@ const LeadsPage = () => {
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
+
+    const handleColorFilterChange = (event) => {
+        setColorFilter(event.target.value);
+    };
+
+    // Function to filter leads by color
+    const filteredLeads = leads.filter(lead => colorFilter === '' || lead.statusColor === colorFilter);
 
     // Function to sort array
     const sortArray = (array, comparator) => {
@@ -57,9 +65,9 @@ const LeadsPage = () => {
         return 0;
     };
 
-    const sortedLeads = sortArray(leads, getComparator(order, orderBy));
-    const totalPage = Math.ceil(sortedLeads.length / rowsPerPage);
-    const displayLeads = sortedLeads.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+    const sortedAndFilteredLeads = sortArray(filteredLeads, getComparator(order, orderBy));
+    const totalPage = Math.ceil(sortedAndFilteredLeads.length / rowsPerPage);
+    const displayLeads = sortedAndFilteredLeads.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
     const pastelColors = {
         red: '#ff6961',
@@ -72,6 +80,17 @@ const LeadsPage = () => {
             <Button variant="contained" color="primary" onClick={importFromGoogleSheets}>
                 Import from Google Sheets
             </Button>
+            <Select
+                value={colorFilter}
+                onChange={handleColorFilterChange}
+                style={{ marginLeft: '10px' }}
+            >
+                <MenuItem value="">All Colors</MenuItem>
+                <MenuItem value="yellow">Yellow</MenuItem>
+                <MenuItem value="green">Green</MenuItem>
+                <MenuItem value="red">Red</MenuItem>
+                
+            </Select>
             <Paper style={{ marginTop: '10px', overflowX: 'auto' }}>
                 <Table>
                     <TableHead>
