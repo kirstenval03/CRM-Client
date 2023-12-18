@@ -15,7 +15,6 @@ export const useLeads = () => {
 export const LeadProvider = ({ children }) => {
     const [leads, setLeads] = useState([]);
 
-    // Function to fetch leads from the server
     const fetchLeads = async () => {
         try {
             const response = await axios.get(`${SERVER_URL}/leads`);
@@ -25,7 +24,6 @@ export const LeadProvider = ({ children }) => {
         }
     };
 
-    // Function to import leads from Google Sheets
     const importFromGoogleSheets = async () => {
         try {
             await axios.get(`${SERVER_URL}/leads/import-from-google-sheets`);
@@ -35,12 +33,22 @@ export const LeadProvider = ({ children }) => {
         }
     };
 
+    const updateLeadColor = async (leadId, statusColor) => {
+        try {
+            console.log("Updating color for lead:", leadId, "to", statusColor);
+            await axios.patch(`${SERVER_URL}/leads/${leadId}/update-color`, { statusColor }); // Update this line
+            fetchLeads(); // Refresh leads after update
+        } catch (error) {
+            console.error('Error updating lead color:', error);
+        }
+    };
+
     useEffect(() => {
         fetchLeads();
     }, []);
 
     return (
-        <LeadContext.Provider value={{ leads, fetchLeads, importFromGoogleSheets }}>
+        <LeadContext.Provider value={{ leads, fetchLeads, importFromGoogleSheets, updateLeadColor }}>
             {children}
         </LeadContext.Provider>
     );

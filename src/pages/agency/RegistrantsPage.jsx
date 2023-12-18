@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Button, TableP
 const CustomersPage = () => {
     const { customers, fetchCustomers, importFromGoogleSheets } = useCustomers();
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(20);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
     useEffect(() => {
         fetchCustomers();

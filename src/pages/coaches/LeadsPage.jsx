@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useLeads } from '../../context/lead.context';
-import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Button } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Button, Select, MenuItem } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 
 const LeadsPage = () => {
-    const { leads, fetchLeads, importFromGoogleSheets } = useLeads();
+    const { leads, fetchLeads, importFromGoogleSheets, updateLeadColor } = useLeads();
     const [page, setPage] = useState(1);
     const rowsPerPage = 10;
 
@@ -14,6 +14,10 @@ const LeadsPage = () => {
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
+    };
+
+    const handleColorChange = (leadId, color) => {
+        updateLeadColor(leadId, color);
     };
 
     const totalPage = Math.ceil(leads.length / rowsPerPage);
@@ -32,16 +36,31 @@ const LeadsPage = () => {
                             <TableCell>Email</TableCell>
                             <TableCell>Coach Name</TableCell>
                             <TableCell>Coach Email</TableCell>
+                            <TableCell>Status Color</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {displayLeads.map((lead) => (
-                            <TableRow key={lead._id}>
-                                <TableCell>{lead.name}</TableCell>
-                                <TableCell>{lead.email}</TableCell>
-                                <TableCell>{lead.coachName}</TableCell>
-                                <TableCell>{lead.coachEmail}</TableCell>
-                            </TableRow>
+                    {displayLeads.map((lead) => (
+    <TableRow 
+        key={lead._id} 
+        style={{ backgroundColor: lead.statusColor || 'transparent' }} // Default to transparent if undefined
+    >
+        <TableCell>{lead.name}</TableCell>
+        <TableCell>{lead.email}</TableCell>
+        <TableCell>{lead.coachName}</TableCell>
+        <TableCell>{lead.coachEmail}</TableCell>
+        <TableCell>
+            <Select
+                value={lead.statusColor || ''} // Default to empty string if undefined
+                onChange={(e) => handleColorChange(lead._id, e.target.value)}
+                                >
+                                    <MenuItem value="">None</MenuItem>
+                                    <MenuItem value="yellow">Yellow</MenuItem>
+                                    <MenuItem value="green">Green</MenuItem>
+                                    <MenuItem value="red">Red</MenuItem>
+                                </Select>
+                            </TableCell>
+                        </TableRow>
                         ))}
                     </TableBody>
                 </Table>
