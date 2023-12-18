@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLeads } from '../../context/lead.context';
-import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Button, Select, MenuItem, TableSortLabel } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Button, Select, MenuItem, TableSortLabel, Grid } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
+import LeadCard from '../../components/LeadCard'; 
 
 const LeadsPage = () => {
     const { leads, fetchLeads, importFromGoogleSheets, updateLeadColor } = useLeads();
@@ -10,6 +11,7 @@ const LeadsPage = () => {
     const [orderBy, setOrderBy] = useState('');
     const [colorFilter, setColorFilter] = useState(''); 
     const rowsPerPage = 10;
+    const [viewMode, setViewMode] = useState('table'); 
 
     useEffect(() => {
         fetchLeads();
@@ -31,6 +33,10 @@ const LeadsPage = () => {
 
     const handleColorFilterChange = (event) => {
         setColorFilter(event.target.value);
+    };
+
+    const toggleViewMode = () => {
+        setViewMode(viewMode === 'table' ? 'cards' : 'table');
     };
 
     // Function to filter leads by color
@@ -77,6 +83,9 @@ const LeadsPage = () => {
 
     return (
         <div style={{ margin: '10px' }}>
+            <Button onClick={toggleViewMode}>
+                Switch to {viewMode === 'table' ? 'Cards' : 'Table'} View
+            </Button>
             <Button variant="contained" color="primary" onClick={importFromGoogleSheets}>
                 Import from Google Sheets
             </Button>
@@ -91,7 +100,10 @@ const LeadsPage = () => {
                 <MenuItem value="red">Red</MenuItem>
                 
             </Select>
+
+           
             <Paper style={{ marginTop: '10px', overflowX: 'auto' }}>
+            {viewMode === 'table' ? (
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -155,6 +167,16 @@ const LeadsPage = () => {
                         ))}
                     </TableBody>
                 </Table>
+                ) : (
+                <Grid container>
+                    {displayLeads.map(lead => (
+                        <Grid item key={lead._id} xs={12} sm={6} md={4}>
+                            <LeadCard lead={lead} />
+                        </Grid>
+                    ))}
+                </Grid>
+            )}
+
                 <Pagination
                     count={totalPage}
                     page={page}
@@ -163,6 +185,8 @@ const LeadsPage = () => {
                     style={{ padding: '20px' }}
                 />
             </Paper>
+            
+
         </div>
     );
 };
