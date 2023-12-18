@@ -61,6 +61,12 @@ const LeadsPage = () => {
     const totalPage = Math.ceil(sortedLeads.length / rowsPerPage);
     const displayLeads = sortedLeads.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
+    const pastelColors = {
+        red: '#ff6961',
+        green: '#77dd77',
+        yellow: '#fdfd96',
+    };
+
     return (
         <div style={{ margin: '10px' }}>
             <Button variant="contained" color="primary" onClick={importFromGoogleSheets}>
@@ -107,7 +113,10 @@ const LeadsPage = () => {
                     </TableHead>
                     <TableBody>
                         {displayLeads.map((lead) => (
-                            <TableRow key={lead._id}>
+                            <TableRow 
+                                key={lead._id} 
+                                style={{ backgroundColor: pastelColors[lead.statusColor] || 'transparent' }}
+                            >
                                 <TableCell>{lead.name}</TableCell>
                                 <TableCell>{lead.email}</TableCell>
                                 <TableCell>{lead.coachName}</TableCell>
