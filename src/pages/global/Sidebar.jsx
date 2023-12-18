@@ -23,6 +23,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import MenuOpenOutlinedIcon from '@mui/icons-material/MenuOpenOutlined';
 import Groups2OutlinedIcon from '@mui/icons-material/Groups2Outlined';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 
 const Sidebar = () => {
     const theme = useTheme();
@@ -150,6 +151,7 @@ const Sidebar = () => {
                         <Item title="Clients" to="/clients" icon={<PeopleAltOutlinedIcon />} selected={selected} setSelected={setSelected} />
                         <Item title="Team Members" to="/team-members" icon={<Groups2OutlinedIcon />} selected={selected} setSelected={setSelected} />
                         <Item title="Event History" to="/event-history" icon={<HistoryOutlinedIcon />} selected={selected} setSelected={setSelected} />
+                        <Item title="Calendar" to="/calendar" icon={<CalendarMonthOutlinedIcon />} selected={selected} setSelected={setSelected} />
                         <Item title="Event Dashboard" to="/event-dashboard" icon={<DashboardIcon />} selected={selected} setSelected={setSelected} />
                         <Item title="Event Information" to="/event-name" icon={<EventNoteOutlinedIcon />} selected={selected} setSelected={setSelected} />
                         <Item title="Registrants" to="/customers" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
