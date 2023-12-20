@@ -12,6 +12,7 @@ import {
   MenuItem,
   TableSortLabel,
   Grid,
+  TextField,
 } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import LeadCard from "../../components/LeadCard";
@@ -25,6 +26,12 @@ const LeadsPage = () => {
   const [colorFilter, setColorFilter] = useState("");
   const rowsPerPage = 10;
   const [viewMode, setViewMode] = useState("table");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value.toLowerCase());
+  };
+  
 
   useEffect(() => {
     fetchLeads();
@@ -52,9 +59,12 @@ const LeadsPage = () => {
     setViewMode(viewMode === "table" ? "cards" : "table");
   };
 
-  // Function to filter leads by color
+  // Function to filter leads by color & search query
   const filteredLeads = leads.filter(
-    (lead) => colorFilter === "" || lead.statusColor === colorFilter
+    (lead) =>
+      (colorFilter === "" || lead.statusColor === colorFilter) &&
+      (lead.name.toLowerCase().includes(searchQuery) ||
+       lead.email.toLowerCase().includes(searchQuery))
   );
 
   // Function to sort array
@@ -124,6 +134,14 @@ const LeadsPage = () => {
         <MenuItem value="green">Green</MenuItem>
         <MenuItem value="red">Red</MenuItem>
       </Select>
+
+      {/* Search Bar */}
+      <TextField
+        label="Search Leads"
+        variant="outlined"
+        style={{ marginLeft: "10px" }}
+        onChange={handleSearchChange}
+      />
 
       <Paper style={{ marginTop: "10px", overflowX: "auto" }}>
         {viewMode === "table" ? (
