@@ -3,9 +3,9 @@ import { Card, CardContent, Typography } from '@mui/material';
 
 const LeadCard = ({ lead }) => {
     const pastelColors = {
-        red: '#ff6961',
-        green: '#77dd77',
-        yellow: '#fdfd96',
+        red: '#F4CCCC',
+        green: '#D9EAD3',
+        yellow: '#FFFDCC',
     };
 
     return (

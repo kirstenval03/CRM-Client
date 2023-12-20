@@ -22,167 +22,209 @@ import LinkOutlinedIcon from '@mui/icons-material/LinkOutlined';
 import SwitchAccountIcon from '@mui/icons-material/SwitchAccount';
 
 const Sidebar = () => {
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-    const [isCollapsed, setIsCollapsed] = useState(false);
-    const [selected, setSelected] = useState("Agency Dashboard");
-    const [view, setView] = useState("agency"); // 'agency' or 'event'
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [selected, setSelected] = useState("Agency Dashboard");
+  const [view, setView] = useState("agency"); // 'agency' or 'event'
 
-    const navigate = useNavigate(); // Hook for navigation
-    const { currentUser } = useContext(UserContext); 
-    const { logOutUser } = useContext(AuthContext);
+  const navigate = useNavigate(); // Hook for navigation
+  const { currentUser } = useContext(UserContext);
+  const { logOutUser } = useContext(AuthContext);
 
-    const handleLogout = () => {
-        logOutUser(); 
-    };
-    const getCapitalizedRole = () => {
-        if (currentUser && currentUser.role) {
-            return currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
+  const handleLogout = () => {
+    logOutUser();
+  };
+  const getCapitalizedRole = () => {
+    if (currentUser && currentUser.role) {
+      return (
+        currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1)
+      );
+    }
+    return "Role";
+  };
+
+  const handleToggleView = () => {
+    setView(view === "agency" ? "event" : "agency");
+    setSelected(view === "agency" ? "Event Dashboard" : "Agency Dashboard"); // Reset selection when switching views
+  };
+
+  // Determine which set of menu items to display
+  const getMenuItems = () => {
+    const agencyItems = [
+      {
+        title: "Agency Dashboard",
+        to: "/agency-dashboard",
+        icon: <DashboardIcon />,
+      },
+      { title: "Clients", to: "/clients", icon: <PeopleAltOutlinedIcon /> },
+      {
+        title: "Team Members",
+        to: "/team-members",
+        icon: <Groups2OutlinedIcon />,
+      },
+      {
+        title: "Event History",
+        to: "/event-history",
+        icon: <HistoryOutlinedIcon />,
+      },
+    ];
+
+    const eventItems = [
+      {
+        title: "Event Dashboard",
+        to: "/event-dashboard",
+        icon: <DashboardIcon />,
+      },
+      {
+        title: "Registrants",
+        to: "/customers",
+        icon: <ContactsOutlinedIcon />,
+      },
+      { title: "Leads", to: "/leads", icon: <ContactsOutlinedIcon /> },
+      { title: "Event Links", to: "/event-links", icon: <LinkOutlinedIcon /> },
+    ];
+
+    return view === "agency" ? agencyItems : eventItems;
+  };
+
+  const menuItems = getMenuItems();
+
+  const Item = ({ title, to, icon, onClick }) => (
+    <MenuItem
+      active={selected === title}
+      style={{ color: colors.grey[400] }}
+      onClick={() => {
+        setSelected(title);
+        if (onClick) {
+          onClick(); // If onClick is provided, call it
+        } else if (to) {
+          navigate(to); // Only navigate if 'to' is provided
         }
-        return "Role";
-    };
+      }}
+      icon={icon}
+    >
+      <Typography>{title}</Typography>
+    </MenuItem>
+  );
 
-    const handleToggleView = () => {
-        setView(view === "agency" ? "event" : "agency");
-        setSelected(view === "agency" ? "Event Dashboard" : "Agency Dashboard"); // Reset selection when switching views
-    };
-
-    // Determine which set of menu items to display
-    const getMenuItems = () => {
-        const agencyItems = [
-            { title: "Agency Dashboard", to: "/agency-dashboard", icon: <DashboardIcon /> },
-            { title: "Clients", to: "/clients", icon: <PeopleAltOutlinedIcon /> },
-            { title: "Team Members", to: "/team-members", icon: <Groups2OutlinedIcon /> },
-            { title: "Event History", to: "/event-history", icon: <HistoryOutlinedIcon /> },
-        ];
-
-        const eventItems = [
-            { title: "Event Dashboard", to: "/event-dashboard", icon: <DashboardIcon /> },
-            { title: "Registrants", to: "/customers", icon: <ContactsOutlinedIcon /> },
-            { title: "Leads", to: "/leads", icon: <ContactsOutlinedIcon /> },
-            { title: "Event Links", to: "/event-links", icon: <LinkOutlinedIcon /> },
-        ];
-
-        return view === "agency" ? agencyItems : eventItems;
-    };
-
-    const menuItems = getMenuItems();
-
-    const Item = ({ title, to, icon }) => (
-        <MenuItem
-            active={selected === title}
-            style={{ color: colors.grey[400] }}
-            onClick={() => {
-                setSelected(title);
-                navigate(to);
+  return (
+    <Box
+      sx={{
+        height: "100% !important" ,
+        "& .pro-sidebar": {
+        height: "100% !important", 
+        },
+        "& .pro-sidebar-inner": {
+          background: `${colors.primary[400]} !important`,
+        },
+        "& .pro-icon-wrapper": {
+          backgroundColor: "transparent !important",
+        },
+        "& .pro-inner-item": {
+          padding: "5px 35px 5px 20px !important",
+        },
+        "& .pro-inner-item:hover": {
+          color: "#868dfb !important",
+        },
+        "& .pro-menu-item.active": {
+          color: "#6870fa !important",
+        },
+      }}
+    >
+      <ProSidebar className="sidebar" collapsed={isCollapsed}>
+        <Menu iconShape="square">
+          {/* Dynamic View Toggle */}
+          <MenuItem
+            onClick={handleToggleView}
+            icon={<SwitchAccountIcon />}
+            style={{ color: colors.grey[100] }}
+          >
+            {!isCollapsed && (
+              <Typography variant="h6" color={colors.grey[500]}>
+                {view === "agency"
+                  ? "Switch to Event View"
+                  : "Switch to Agency View"}
+              </Typography>
+            )}
+          </MenuItem>
+          {/* LOGO AND MENU ICON */}
+          <MenuItem
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            icon={isCollapsed ? <MenuOpenOutlinedIcon /> : undefined}
+            style={{
+              margin: "10px 0 20px 0",
+              color: colors.grey[100],
             }}
-            icon={icon}
-        >
-            <Typography>{title}</Typography>
-        </MenuItem>
-    );
+          >
+            {!isCollapsed && (
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                ml="15px"
+              >
+                <Typography variant="h3" color={colors.grey[500]}>
+                  E3-CRM
+                </Typography>
+                <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
+                  <MenuOpenOutlinedIcon />
+                </IconButton>
+              </Box>
+            )}
+          </MenuItem>
 
-    return (
-        <Box sx={{
-            "& .pro-sidebar-inner": {
-                background: `${colors.primary[400]} !important`,
-            },
-            "& .pro-icon-wrapper": {
-                backgroundColor: "transparent !important",
-            },
-            "& .pro-inner-item": {
-                padding: "5px 35px 5px 20px !important",
-            },
-            "& .pro-inner-item:hover": {
-                color: "#868dfb !important",
-            },
-            "& .pro-menu-item.active": {
-                color: "#6870fa !important",
-            },
-        }}>
-            <ProSidebar collapsed={isCollapsed}>
-                <Menu iconShape="square">
-                    {/* Dynamic View Toggle */}
-                    <MenuItem
-                        onClick={handleToggleView}
-                        icon={<SwitchAccountIcon />}
-                        style={{ color: colors.grey[100] }}
-                    >
-                        {!isCollapsed && (
-                            <Typography variant="h6" color={colors.grey[500]}>
-                                {view === "agency" ? "Switch to Event View" : "Switch to Agency View"}
-                            </Typography>
-                        )}
-                    </MenuItem>
-                    {/* LOGO AND MENU ICON */}
-                    <MenuItem
-                        onClick={() => setIsCollapsed(!isCollapsed)}
-                        icon={isCollapsed ? <MenuOpenOutlinedIcon /> : undefined}
-                        style={{
-                            margin: "10px 0 20px 0",
-                            color: colors.grey[100],
-                        }}
-                    >
-                        {!isCollapsed && (
-                            <Box
-                                display="flex"
-                                justifyContent="space-between"
-                                alignItems="center"
-                                ml="15px"
-                            >
-                                <Typography variant="h3" color={colors.grey[500]}>
-                                    E3-CRM
-                                </Typography>
-                                <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-                                    <MenuOpenOutlinedIcon />
-                                </IconButton>
-                            </Box>
-                        )}
-                    </MenuItem>
+          {!isCollapsed && currentUser && (
+            <Box mb="25px">
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <img
+                  alt="p"
+                  width="100px"
+                  height="100px"
+                  src={defUserImage}
+                  style={{ cursor: "pointer", borderRadius: "50%" }}
+                />
+              </Box>
+              <Box textAlign="center">
+                <Typography
+                  variant="h2"
+                  color={colors.grey[400]}
+                  fontWeight="bold"
+                  sx={{ m: "10px 0 0 0" }}
+                >
+                  {currentUser.firstName} {currentUser.lastName}{" "}
+                  {/* Display user's name */}
+                </Typography>
+                <Typography variant="h5" color={colors.greenAccent[500]}>
+                  {getCapitalizedRole()} {/* Display user's role */}
+                </Typography>
+              </Box>
+            </Box>
+          )}
 
-                    {!isCollapsed && currentUser && (
-                        <Box mb="25px">
-                            <Box display="flex" justifyContent="center" alignItems="center">
-                                <img
-                                    alt="p"
-                                    width="100px"
-                                    height="100px"
-                                    src={defUserImage}
-                                    style={{ cursor: "pointer", borderRadius: "50%" }}
-                                />
-                                
-                            </Box>
-                            <Box textAlign="center">
-                                <Typography
-                                    variant="h2"
-                                    color={colors.grey[400]}
-                                    fontWeight="bold"
-                                    sx={{ m: "10px 0 0 0" }}
-                                >
-                                    {currentUser.firstName} {currentUser.lastName} {/* Display user's name */}
-                                </Typography>
-                                <Typography variant="h5" color={colors.greenAccent[500]}>
-                                    {getCapitalizedRole()} {/* Display user's role */}
-                                </Typography>
-                            </Box>
-                        </Box>
-                    )}
+          {menuItems.map((item) => (
+            <Item key={item.title} {...item} />
+          ))}
 
-{menuItems.map(item => (
-                        <Item key={item.title} {...item} />
-                    ))}
-
-                    {/* Common Menu Items */}
-                    <Item title="Profile Settings" to="/profile-settings" icon={<SettingsOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                    <Item title="Logout" 
-                        onClick={handleLogout} 
-                        icon={<ExitToAppOutlinedIcon />} 
-                        selected={selected} 
-                        setSelected={setSelected} />
-                </Menu>
-            </ProSidebar>
-        </Box>
-    );
+          {/* Common Menu Items */}
+          <Item
+            title="Profile Settings"
+            to="/profile-settings"
+            icon={<SettingsOutlinedIcon />}
+            selected={selected}
+            setSelected={setSelected}
+          />
+          <Item
+            title="Logout"
+            onClick={handleLogout}
+            icon={<ExitToAppOutlinedIcon />}
+            selected={selected}
+            setSelected={setSelected}
+          />
+        </Menu>
+      </ProSidebar>
+    </Box>
+  );
 };
 
 export default Sidebar;
