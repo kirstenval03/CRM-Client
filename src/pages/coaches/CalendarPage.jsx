@@ -3,7 +3,7 @@ import { useEvents } from '../../context/event.context';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import AddEventForm from '../../components/AddEvent'; // Assume this is the path to your AddEventForm component
+import AddEventForm from '../../components/AddEvent'; 
 
 const localizer = momentLocalizer(moment);
 

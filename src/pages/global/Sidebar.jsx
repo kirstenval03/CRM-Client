@@ -2,9 +2,7 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../../context/auth.context";
 import { UserContext } from "../../context/user.context";
 import { useNavigate } from 'react-router-dom'; 
-import { Link } from "react-router-dom";
 import defUserImage from '../../assets/defUser.png';
-
 
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
@@ -15,21 +13,20 @@ import { tokens } from "../../theme";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
-import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-import AnalyticsOutlinedIcon from "@mui/icons-material/AnalyticsOutlined";
-import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import MenuOpenOutlinedIcon from '@mui/icons-material/MenuOpenOutlined';
 import Groups2OutlinedIcon from '@mui/icons-material/Groups2Outlined';
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import LinkOutlinedIcon from '@mui/icons-material/LinkOutlined';
+import SwitchAccountIcon from '@mui/icons-material/SwitchAccount';
 
 const Sidebar = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Agency Dashboard");
+    const [view, setView] = useState("agency"); // 'agency' or 'event'
 
     const navigate = useNavigate(); // Hook for navigation
     const { currentUser } = useContext(UserContext); 
@@ -38,59 +35,85 @@ const Sidebar = () => {
     const handleLogout = () => {
         logOutUser(); 
     };
-
     const getCapitalizedRole = () => {
         if (currentUser && currentUser.role) {
             return currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
         }
-        return "Role"; 
+        return "Role";
     };
 
-    // Component for each menu item
-    const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
-    
-      const navigate = useNavigate(); 
-    
-      return (
-        <MenuItem
-          active={selected === title}
-          style={{ color: colors.grey[400] }}
-          onClick={() => {
-            setSelected(title);
-            if (onClick) {
-              onClick(); 
-            } else {
-              navigate(to); 
-            }
-          }}
-          icon={icon}
-        >
-          <Typography>{title}</Typography>
-        </MenuItem>
-      );
+    const handleToggleView = () => {
+        setView(view === "agency" ? "event" : "agency");
+        setSelected(view === "agency" ? "Event Dashboard" : "Agency Dashboard"); // Reset selection when switching views
     };
-    return (
-        <Box
-            sx={{
-                "& .pro-sidebar-inner": {
-                    background: `${colors.primary[400]} !important`,
-                },
-                "& .pro-icon-wrapper": {
-                    backgroundColor: "transparent !important",
-                },
-                "& .pro-inner-item": {
-                    padding: "5px 35px 5px 20px !important",
-                },
-                "& .pro-inner-item:hover": {
-                    color: "#868dfb !important",
-                },
-                "& .pro-menu-item.active": {
-                    color: "#6870fa !important",
-                },
+
+    // Determine which set of menu items to display
+    const getMenuItems = () => {
+        const agencyItems = [
+            { title: "Agency Dashboard", to: "/agency-dashboard", icon: <DashboardIcon /> },
+            { title: "Clients", to: "/clients", icon: <PeopleAltOutlinedIcon /> },
+            { title: "Team Members", to: "/team-members", icon: <Groups2OutlinedIcon /> },
+            { title: "Event History", to: "/event-history", icon: <HistoryOutlinedIcon /> },
+        ];
+
+        const eventItems = [
+            { title: "Event Dashboard", to: "/event-dashboard", icon: <DashboardIcon /> },
+            { title: "Registrants", to: "/customers", icon: <ContactsOutlinedIcon /> },
+            { title: "Leads", to: "/leads", icon: <ContactsOutlinedIcon /> },
+            { title: "Event Links", to: "/event-links", icon: <LinkOutlinedIcon /> },
+        ];
+
+        return view === "agency" ? agencyItems : eventItems;
+    };
+
+    const menuItems = getMenuItems();
+
+    const Item = ({ title, to, icon }) => (
+        <MenuItem
+            active={selected === title}
+            style={{ color: colors.grey[400] }}
+            onClick={() => {
+                setSelected(title);
+                navigate(to);
             }}
+            icon={icon}
         >
+            <Typography>{title}</Typography>
+        </MenuItem>
+    );
+
+    return (
+        <Box sx={{
+            "& .pro-sidebar-inner": {
+                background: `${colors.primary[400]} !important`,
+            },
+            "& .pro-icon-wrapper": {
+                backgroundColor: "transparent !important",
+            },
+            "& .pro-inner-item": {
+                padding: "5px 35px 5px 20px !important",
+            },
+            "& .pro-inner-item:hover": {
+                color: "#868dfb !important",
+            },
+            "& .pro-menu-item.active": {
+                color: "#6870fa !important",
+            },
+        }}>
             <ProSidebar collapsed={isCollapsed}>
                 <Menu iconShape="square">
+                    {/* Dynamic View Toggle */}
+                    <MenuItem
+                        onClick={handleToggleView}
+                        icon={<SwitchAccountIcon />}
+                        style={{ color: colors.grey[100] }}
+                    >
+                        {!isCollapsed && (
+                            <Typography variant="h6" color={colors.grey[500]}>
+                                {view === "agency" ? "Switch to Event View" : "Switch to Agency View"}
+                            </Typography>
+                        )}
+                    </MenuItem>
                     {/* LOGO AND MENU ICON */}
                     <MenuItem
                         onClick={() => setIsCollapsed(!isCollapsed)}
@@ -145,26 +168,17 @@ const Sidebar = () => {
                         </Box>
                     )}
 
-                    <Box paddingLeft={isCollapsed ? undefined : "10%"}>
-                        {/* Menu Items */}
-                        <Item title="Agency Dashboard" to="/agency-dashboard" icon={<DashboardIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="Clients" to="/clients" icon={<PeopleAltOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="Team Members" to="/team-members" icon={<Groups2OutlinedIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="Event History" to="/event-history" icon={<HistoryOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="Calendar" to="/calendar" icon={<CalendarMonthOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="Event Dashboard" to="/event-dashboard" icon={<DashboardIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="Event Information" to="/event-name" icon={<EventNoteOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="Registrants" to="/customers" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="Leads" to="/leads" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="Analytics" to="/analytics" icon={<AnalyticsOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="Event Links" to="/event-links" icon={<LinkOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="Profile Settings" to="/profile-settings" icon={<SettingsOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                        <Item title="Logout" 
+{menuItems.map(item => (
+                        <Item key={item.title} {...item} />
+                    ))}
+
+                    {/* Common Menu Items */}
+                    <Item title="Profile Settings" to="/profile-settings" icon={<SettingsOutlinedIcon />} selected={selected} setSelected={setSelected} />
+                    <Item title="Logout" 
                         onClick={handleLogout} 
                         icon={<ExitToAppOutlinedIcon />} 
                         selected={selected} 
                         setSelected={setSelected} />
-                    </Box>
                 </Menu>
             </ProSidebar>
         </Box>
@@ -172,3 +186,5 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+                        
+                  
