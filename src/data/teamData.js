@@ -47,5 +47,6 @@ export const teamData = [
       role: "Sales Coach",
       access: "Restricted",
     },
+  
 
      ]

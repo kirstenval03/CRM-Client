@@ -1,20 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useEvents } from '../../context/event.context';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import AddEventForm from '../../components/AddEvent'; // Assume this is the path to your AddEventForm component
 
 const localizer = momentLocalizer(moment);
 
 const CalendarPage = () => {
     const { events, fetchEvents } = useEvents();
+    const [showAddEventModal, setShowAddEventModal] = useState(false);
 
     useEffect(() => {
         fetchEvents();
     }, []);
 
+    const handleAddEventClick = () => {
+        setShowAddEventModal(true);
+    };
+
     return (
         <div style={{ height: 700 }}>
+            <button onClick={handleAddEventClick}>Add Event</button>
             <Calendar
                 localizer={localizer}
                 events={events.map(event => ({
@@ -27,6 +34,7 @@ const CalendarPage = () => {
                 endAccessor="end"
                 style={{ height: 500 }}
             />
+            {showAddEventModal && <AddEventForm closeModal={() => setShowAddEventModal(false)} />}
         </div>
     );
 };
