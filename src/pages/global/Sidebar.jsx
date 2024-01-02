@@ -1,13 +1,15 @@
-import { useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../context/auth.context";
 import { UserContext } from "../../context/user.context";
-import { useNavigate } from 'react-router-dom'; 
-import defUserImage from '../../assets/defUser.png';
+import { useNavigate } from "react-router-dom";
+import defUserImage from "../../assets/defUser.png";
 
-import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
+import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
+import { SERVER_URL } from "../../services/SERVER_URL";
+import axios from "axios";
 
 // Import necessary icons
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -16,10 +18,10 @@ import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
-import MenuOpenOutlinedIcon from '@mui/icons-material/MenuOpenOutlined';
-import Groups2OutlinedIcon from '@mui/icons-material/Groups2Outlined';
-import LinkOutlinedIcon from '@mui/icons-material/LinkOutlined';
-import SwitchAccountIcon from '@mui/icons-material/SwitchAccount';
+import MenuOpenOutlinedIcon from "@mui/icons-material/MenuOpenOutlined";
+import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
+import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
+import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
 
 const Sidebar = () => {
   const theme = useTheme();
@@ -27,14 +29,29 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Agency Dashboard");
   const [view, setView] = useState("agency"); // 'agency' or 'event'
+  const [clients, setClients] = useState([]);
+  const [selectedClient, setSelectedClient] = useState("");
 
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
   const { logOutUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    // Fetch the list of clients from your server
+    axios
+      .get(`${SERVER_URL}/client`)
+      .then((response) => {
+        setClients(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching clients:", error);
+      });
+  }, []);
 
   const handleLogout = () => {
     logOutUser();
   };
+
   const getCapitalizedRole = () => {
     if (currentUser && currentUser.role) {
       return (
@@ -46,10 +63,16 @@ const Sidebar = () => {
 
   const handleToggleView = () => {
     setView(view === "agency" ? "event" : "agency");
-    setSelected(view === "agency" ? "Event Dashboard" : "Agency Dashboard"); // Reset selection when switching views
+    setSelectedClient(""); // Reset selected client when switching views
   };
 
-  // Determine which set of menu items to display
+  const handleClientChange = (event) => {
+    const selectedClientName = event.target.value;
+    setSelectedClient(selectedClientName);
+    setView("event"); // Switch to the "Event View"
+    setSelected(selectedClientName); // Update the selected state
+  };
+
   const getMenuItems = () => {
     const agencyItems = [
       {
@@ -72,18 +95,30 @@ const Sidebar = () => {
 
     const eventItems = [
       {
-        title: "Event Dashboard",
-        to: "/event-dashboard",
+        title: "Events",
+        to: "/events",
         icon: <DashboardIcon />,
       },
       {
-        title: "Registrants",
-        to: "/customers",
+        title: "Contacts",
+        to: "/contacts",
         icon: <ContactsOutlinedIcon />,
       },
-      { title: "Leads", to: "/leads", icon: <ContactsOutlinedIcon /> },
       { title: "Event Links", to: "/event-links", icon: <LinkOutlinedIcon /> },
     ];
+
+    // Add a menu item to go back to the Agency View if a client is selected
+    if (selectedClient) {
+      eventItems.unshift({
+        title: `Back to ${selectedClient}`,
+        onClick: () => {
+          setSelectedClient(""); // Clear the selected client
+          setView("agency"); // Switch back to the "Agency View"
+          setSelected("Agency View"); // Update the selected state
+        },
+        icon: <DashboardIcon />,
+      });
+    }
 
     return view === "agency" ? agencyItems : eventItems;
   };
@@ -97,9 +132,9 @@ const Sidebar = () => {
       onClick={() => {
         setSelected(title);
         if (onClick) {
-          onClick(); // If onClick is provided, call it
+          onClick();
         } else if (to) {
-          navigate(to); // Only navigate if 'to' is provided
+          navigate(to);
         }
       }}
       icon={icon}
@@ -111,9 +146,9 @@ const Sidebar = () => {
   return (
     <Box
       sx={{
-        height: "100% !important" ,
+        height: "100% !important",
         "& .pro-sidebar": {
-        height: "100% !important", 
+          height: "100% !important",
         },
         "& .pro-sidebar-inner": {
           background: `${colors.primary[400]} !important`,
@@ -134,21 +169,6 @@ const Sidebar = () => {
     >
       <ProSidebar className="sidebar" collapsed={isCollapsed}>
         <Menu iconShape="square">
-          {/* Dynamic View Toggle */}
-          <MenuItem
-            onClick={handleToggleView}
-            icon={<SwitchAccountIcon />}
-            style={{ color: colors.grey[100] }}
-          >
-            {!isCollapsed && (
-              <Typography variant="h6" color={colors.grey[500]}>
-                {view === "agency"
-                  ? "Switch to Event View"
-                  : "Switch to Agency View"}
-              </Typography>
-            )}
-          </MenuItem>
-          {/* LOGO AND MENU ICON */}
           <MenuItem
             onClick={() => setIsCollapsed(!isCollapsed)}
             icon={isCollapsed ? <MenuOpenOutlinedIcon /> : undefined}
@@ -174,14 +194,43 @@ const Sidebar = () => {
             )}
           </MenuItem>
 
+          <SubMenu
+  title={!isCollapsed && (selectedClient || view === "agency") ? selectedClient || "Agency View" : "Select Client"}
+  icon={<SwitchAccountIcon />}
+  style={{ color: colors.grey[100] }}
+>
+  {/* Add the "Agency View" option */}
+  <MenuItem
+    onClick={() => {
+      setSelectedClient(""); // Clear the selected client
+      setView("agency"); // Switch to the "Agency View"
+      setSelected("Agency View"); // Update the selected state
+    }}
+    style={{ color: colors.grey[400] }}
+  >
+    Agency View
+  </MenuItem>
+  {clients.map((client) => (
+    <MenuItem
+      key={client.id}
+      onClick={handleClientChange}
+      value={client.name}
+      style={{ color: colors.grey[400] }}
+    >
+      {client.name}
+    </MenuItem>
+  ))}
+</SubMenu>
+
+
           {!isCollapsed && currentUser && (
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center">
                 <img
-                  alt="p"
+                  alt="User"
                   width="100px"
                   height="100px"
-                  src={defUserImage}
+                  src={currentUser.photo || defUserImage}
                   style={{ cursor: "pointer", borderRadius: "50%" }}
                 />
               </Box>
@@ -192,11 +241,10 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  {currentUser.firstName} {currentUser.lastName}{" "}
-                  {/* Display user's name */}
+                  {currentUser.firstName} {currentUser.lastName}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  {getCapitalizedRole()} {/* Display user's role */}
+                  {getCapitalizedRole()}
                 </Typography>
               </Box>
             </Box>
@@ -206,20 +254,15 @@ const Sidebar = () => {
             <Item key={item.title} {...item} />
           ))}
 
-          {/* Common Menu Items */}
           <Item
             title="Profile Settings"
             to="/profile-settings"
             icon={<SettingsOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
           />
           <Item
             title="Logout"
             onClick={handleLogout}
             icon={<ExitToAppOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
           />
         </Menu>
       </ProSidebar>
@@ -228,5 +271,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-                        
-                  
+

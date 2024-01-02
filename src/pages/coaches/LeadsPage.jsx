@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom"; // Import useHistory
 import { useLeads } from "../../context/lead.context";
 import {
   Table,
@@ -15,9 +16,10 @@ import {
   TextField,
 } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
-import LeadCard from "../../components/LeadCard";
+import BoardCard from "../../components/BoardCard";
 
 const LeadsPage = () => {
+  const history = useHistory(); // Initialize useHistory
   const { leads, fetchLeads, importFromGoogleSheets, updateLeadColor } =
     useLeads();
   const [page, setPage] = useState(1);
@@ -31,7 +33,6 @@ const LeadsPage = () => {
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
   };
-  
 
   useEffect(() => {
     fetchLeads();
@@ -53,6 +54,11 @@ const LeadsPage = () => {
 
   const handleColorFilterChange = (event) => {
     setColorFilter(event.target.value);
+  };
+
+  const handleSwitchView = () => {
+    // Redirect to the board view when switching views
+    history.push("/leads-board");
   };
 
   const toggleViewMode = () => {

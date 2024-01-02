@@ -10,8 +10,11 @@ import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/Home";
 import AgencyDashboard from "./pages/agency/agencyDashPage";
 import TeamMembers from "./pages/agency/TeamMembers";
-import RegistrantsPage from "./pages/agency/RegistrantsPage";
-import LeadsPage from "./pages/coaches/LeadsPage";
+import Clients from "./pages/agency/Clients";
+
+
+// import RegistrantsPage from "./pages/agency/RegistrantsPage";
+// import LeadsPage from "./pages/coaches/LeadsPage";
 import CalendarPage from "./pages/coaches/CalendarPage";
 
 import Sidebar from "./pages/global/Sidebar";
@@ -61,8 +64,10 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/agency-dashboard" element={<AgencyDashboard />} />
             <Route path="/team-members" element={<TeamMembers />} />
-            <Route path="/customers" element={<RegistrantsPage/>}/>
-            <Route path="/leads" element={<LeadsPage/>}/>
+            <Route path="/clients" element={<Clients />} />
+            
+            {/* <Route path="/customers" element={<RegistrantsPage/>}/> */}
+            {/* <Route path="/leads" element={<LeadsPage/>}/> */}
             <Route path="/calendar" element={<CalendarPage/>}/>
 
             {/* ... other routes ... */}
