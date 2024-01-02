@@ -12,10 +12,10 @@ import AgencyDashboard from "./pages/agency/agencyDashPage";
 import TeamMembers from "./pages/agency/TeamMembers";
 import Clients from "./pages/agency/Clients";
 
-
+import EventsPage from "./pages/coaches/EventsPage";
 // import RegistrantsPage from "./pages/agency/RegistrantsPage";
 // import LeadsPage from "./pages/coaches/LeadsPage";
-import CalendarPage from "./pages/coaches/CalendarPage";
+// import CalendarPage from "./pages/coaches/CalendarPage";
 
 import Sidebar from "./pages/global/Sidebar";
 import Topbar from "./pages/global/Topbar";
@@ -68,7 +68,8 @@ function App() {
             
             {/* <Route path="/customers" element={<RegistrantsPage/>}/> */}
             {/* <Route path="/leads" element={<LeadsPage/>}/> */}
-            <Route path="/calendar" element={<CalendarPage/>}/>
+           <Route path="/events" element={<EventsPage/>}/>
+            {/* <Route path="/calendar" element={<CalendarPage/>}/> */}
 
             {/* ... other routes ... */}
           </Route>
