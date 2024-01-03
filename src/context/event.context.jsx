@@ -25,12 +25,13 @@ export function EventProvider({ children }) {
       });
   }, []);
 
-  // CREATE EVENT
-  const createEvent = (newEvent, clientId) => {
+ // CREATE EVENT
+const createEvent = (newEvent, clientId) => {
     axios
       .post(`${SERVER_URL}/event/new-event`, { ...newEvent, clientId })
       .then((response) => {
-        setEvents([...events, response.data]);
+        // Update the state immediately with the new event
+        setEvents((prevEvents) => [...prevEvents, response.data]);
       })
       .catch((error) => {
         console.error('Error creating event:', error);

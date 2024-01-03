@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { useEventContext } from '../../context/event.context'; // Updated import
+import { useEventContext } from '../../context/event.context';
 import EventForm from '../../components/EventForm';
 
 function EventsPage() {
-  const { events, isLoading, createEvent, updateEvent, deleteEvent } = useEventContext(); // Use useEventContext
+  const { events, isLoading, createEvent, updateEvent, deleteEvent } = useEventContext();
   const [isFormVisible, setIsFormVisible] = useState(false);
 
-  // Define your event-related functions similar to the Clients component
+  const handleSeeDetails = (event) => {
+    console.log('Event Details:', event);
+  };
 
   return (
     <div>
@@ -14,7 +16,7 @@ function EventsPage() {
       <button onClick={() => setIsFormVisible(true)}>Create New Event</button>
       {isFormVisible && (
         <EventForm
-          onClose={() => setIsFormVisible(false)} // Close the form when the user clicks "Close"
+          onClose={() => setIsFormVisible(false)}
         />
       )}
       {isLoading ? (
@@ -23,11 +25,11 @@ function EventsPage() {
         <p>No active events found.</p>
       ) : (
         <div className="event-cards">
-          {/* Render event cards with event name and date */}
           {events.map((event) => (
             <div key={event._id} className="event-card">
               <h2>{event.name}</h2>
               <p>Date: {event.date}</p>
+              <button onClick={() => handleSeeDetails(event)}>See Details</button>
               <button onClick={() => handleUpdateClick(event)}>Update</button>
               <button
                 onClick={() => {

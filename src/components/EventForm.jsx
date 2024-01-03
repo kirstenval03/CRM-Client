@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useEventContext } from '../context/event.context';
+import axios from 'axios'; // Import axios
+import { SERVER_URL } from '../services/SERVER_URL'; // Import SERVER_URL
 
 const modalStyle = {
   position: 'fixed',
@@ -25,19 +27,17 @@ function EventForm({ onClose }) {
     clientId: '', // Add clientId to associate the event with a client
   });
   const [clients, setClients] = useState([]);
-  const [selectedClient, setSelectedClient] = useState('');
+  const [selectedClientName, setSelectedClientName] = useState(''); // Store the selected client's name
 
   useEffect(() => {
-    // Fetch the list of clients from your server and populate the dropdown
-    // Make an axios request to get the list of clients and set it in the 'clients' state.
-    // Example:
-    // axios.get(`${SERVER_URL}/clients`)
-    //   .then((response) => {
-    //     setClients(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching clients:', error);
-    //   });
+    axios
+      .get(`${SERVER_URL}/client`)
+      .then((response) => {
+        setClients(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching clients:', error);
+      });
   }, []);
 
   const handleInputChange = (e) => {
@@ -48,12 +48,24 @@ function EventForm({ onClose }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Ensure a client is selected before creating the event
-    if (!selectedClient) {
+    if (!selectedClientName) {
       alert('Please select a client.');
       return;
     }
+    // Find the client with the matching name
+    const matchingClient = clients.find((client) => client.name === selectedClientName);
+
+    if (!matchingClient) {
+      alert('Selected client not found.');
+      return;
+    }
+
+    // Extract the client's ID
+    const clientId = matchingClient._id;
+
     // Associate the selected client's ID with the event
-    newEvent.clientId = selectedClient;
+    newEvent.clientId = clientId;
+
     // Send a POST request to create the event
     createEvent(newEvent);
     // Close the form
@@ -122,17 +134,18 @@ function EventForm({ onClose }) {
           </select>
         </label>
         <br />
+        <br />
         <label>
           Client:
           <select
             name="clientId"
-            value={selectedClient}
-            onChange={(e) => setSelectedClient(e.target.value)}
+            value={selectedClientName}
+            onChange={(e) => setSelectedClientName(e.target.value)}
             required
           >
             <option value="">Select a client</option>
             {clients.map((client) => (
-              <option key={client._id} value={client._id}>
+              <option key={client._id} value={client.name}>
                 {client.name}
               </option>
             ))}
@@ -146,3 +159,4 @@ function EventForm({ onClose }) {
 }
 
 export default EventForm;
+

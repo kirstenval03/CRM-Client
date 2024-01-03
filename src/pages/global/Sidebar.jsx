@@ -195,33 +195,36 @@ const Sidebar = () => {
           </MenuItem>
 
           <SubMenu
-  title={!isCollapsed && (selectedClient || view === "agency") ? selectedClient || "Agency View" : "Select Client"}
-  icon={<SwitchAccountIcon />}
-  style={{ color: colors.grey[100] }}
->
-  {/* Add the "Agency View" option */}
-  <MenuItem
-    onClick={() => {
-      setSelectedClient(""); // Clear the selected client
-      setView("agency"); // Switch to the "Agency View"
-      setSelected("Agency View"); // Update the selected state
-    }}
-    style={{ color: colors.grey[400] }}
-  >
-    Agency View
-  </MenuItem>
-  {clients.map((client) => (
-    <MenuItem
-      key={client.id}
-      onClick={handleClientChange}
-      value={client.name}
-      style={{ color: colors.grey[400] }}
-    >
-      {client.name}
-    </MenuItem>
-  ))}
-</SubMenu>
-
+            title={
+              !isCollapsed && (selectedClient || view === "agency")
+                ? selectedClient || "Agency View"
+                : "Select Client"
+            }
+            icon={<SwitchAccountIcon />}
+            style={{ color: colors.grey[100] }}
+          >
+            {/* Add the "Agency View" option */}
+            <MenuItem
+              onClick={() => {
+                setSelectedClient(""); // Clear the selected client
+                setView("agency"); // Switch to the "Agency View"
+                setSelected("Agency View"); // Update the selected state
+              }}
+              style={{ color: colors.grey[400] }}
+            >
+              Agency View
+            </MenuItem>
+            {clients.map((client) => (
+              <MenuItem
+                key={client.id}
+                onClick={handleClientChange}
+                value={client.name}
+                style={{ color: colors.grey[400] }}
+              >
+                {client.name}
+              </MenuItem>
+            ))}
+          </SubMenu>
 
           {!isCollapsed && currentUser && (
             <Box mb="25px">
@@ -265,6 +268,12 @@ const Sidebar = () => {
             icon={<ExitToAppOutlinedIcon />}
           />
         </Menu>
+
+                        {/* Switch to Dashboard
+                        Online Training
+                        Settings
+                        Event History
+                        Personal Stats */}
       </ProSidebar>
     </Box>
   );

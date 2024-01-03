@@ -41,3 +41,30 @@ body,
 .home{
   color: aliceblue;
 }
+
+/* events.css */
+
+/* Style for the event cards */
+.event-card {
+  background-color: #e4f0f3; /* Set your desired background color here */
+  border: 1px solid #e6e6e6; /* Add a border for better separation */
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px; /* Add rounded corners */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+/* Style for the "See Details" button */
+.event-card button {
+  background-color: #072f40; /* Set a different color for the button */
+  color: white; /* Set text color to white */
+  border: none;
+  padding: 5px 10px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+/* Style for the "See Details" button on hover */
+.event-card button:hover {
+  background-color: #68d7dd; /* Darken the color on hover */
+}
