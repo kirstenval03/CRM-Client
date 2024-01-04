@@ -54,20 +54,28 @@ function EventForm({ onClose }) {
     }
     // Find the client with the matching name
     const matchingClient = clients.find((client) => client.name === selectedClientName);
-
+  
     if (!matchingClient) {
       alert('Selected client not found.');
       return;
     }
-
+  
     // Extract the client's ID
     const clientId = matchingClient._id;
-
-    // Associate the selected client's ID with the event
-    newEvent.clientId = clientId;
-
+  
+    // Create a new object with event details
+    const eventDetails = {
+      name: newEvent.name,
+      initials: newEvent.initials,
+      edition: newEvent.edition,
+      date: newEvent.date,
+      driveFolder: newEvent.driveFolder,
+      active: newEvent.active,
+      coaches: newEvent.coaches,
+    };
+  
     // Send a POST request to create the event
-    createEvent(newEvent);
+    createEvent(eventDetails, clientId);
     // Close the form
     onClose();
   };
