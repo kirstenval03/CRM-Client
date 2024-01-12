@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Updated import
-import { useParams } from 'react-router-dom';
-
-
-import { useContacts } from "../../context/contact.context";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -17,10 +14,12 @@ import {
 } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 
+import { useContacts } from "../../context/contact.context";
+
 const ContactsPage = () => {
   const { eventId } = useParams();
-  const navigate = useNavigate(); // Updated usage
-  const { contacts, fetchContacts, importContacts  } = useContacts();
+  const navigate = useNavigate();
+  const { eventContacts, fetchContacts, importContacts } = useContacts();
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("");
@@ -44,11 +43,12 @@ const ContactsPage = () => {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+
   const handleImportContacts = () => {
     importContacts(eventId); // Initiates the import of event contacts
   };
 
-  if (!contacts) {
+  if (!eventContacts || eventContacts.length === 0) {
     return (
       <div>
         <Button variant="contained" color="primary" onClick={handleImportContacts}>
@@ -59,7 +59,7 @@ const ContactsPage = () => {
   }
 
   // Function to filter contacts by search query
-  const filteredContacts = contacts.filter(
+  const filteredContacts = eventContacts.filter(
     (contact) =>
       contact.name.toLowerCase().includes(searchQuery) ||
       contact.email.toLowerCase().includes(searchQuery)
@@ -79,16 +79,16 @@ const ContactsPage = () => {
   // Comparator function
   const getComparator = (order, orderBy) => {
     return order === "desc"
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
+      ? (a, b) => descendingComparator(a[orderBy], b[orderBy])
+      : (a, b) => -descendingComparator(a[orderBy], b[orderBy]);
   };
 
   // Descending comparator
-  const descendingComparator = (a, b, orderBy) => {
-    if (b[orderBy] < a[orderBy]) {
+  const descendingComparator = (a, b) => {
+    if (b < a) {
       return -1;
     }
-    if (b[orderBy] > a[orderBy]) {
+    if (b > a) {
       return 1;
     }
     return 0;

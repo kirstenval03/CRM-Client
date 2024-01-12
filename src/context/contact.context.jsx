@@ -17,6 +17,7 @@ export function ContactProvider({ children, initialEventId }) {
         try {
             const response = await axios.get(`${SERVER_URL}/contact/${eventId}`);
             setEventContacts(response.data);
+            console.log('Fetched contacts:', response.data); // Add this line
         } catch (error) {
             console.error('Error fetching contacts:', error);
         }
@@ -79,9 +80,12 @@ export function ContactProvider({ children, initialEventId }) {
 
     useEffect(() => {
         if (initialEventId) {
-          fetchContacts(initialEventId);
+            console.log("Fetching contacts for event: ", initialEventId); // Add this line
+            fetchContacts(initialEventId);
         }
-      }, [initialEventId]);
+    }, [initialEventId]);
+
+    console.log("Updated eventContacts: ", eventContacts); // Add this line for debugging
 
     return (
         <ContactContext.Provider value={value}>
@@ -89,3 +93,4 @@ export function ContactProvider({ children, initialEventId }) {
         </ContactContext.Provider>
     );
 }
+
