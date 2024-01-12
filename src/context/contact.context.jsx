@@ -8,7 +8,7 @@ export function useContacts() {
     return useContext(ContactContext);
 }
 
-export function ContactProvider({ children }) {
+export function ContactProvider({ children, initialEventId }) {
     const [contacts, setContacts] = useState([]);
     const [eventContacts, setEventContacts] = useState([]); // Store contacts for the current event
 
@@ -65,8 +65,11 @@ export function ContactProvider({ children }) {
     };
 
     useEffect(() => {
-        fetchContacts(); // Fetch contacts for the current event when the component mounts
-    }, []);
+        if (initialEventId) {
+          fetchContacts(initialEventId);
+        }
+      }, [initialEventId]);
+      
 
     return (
         <ContactContext.Provider value={value}>
