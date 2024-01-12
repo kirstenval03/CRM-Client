@@ -56,12 +56,25 @@ export function ContactProvider({ children, initialEventId }) {
         }
     };
 
+    // Initiate the import of contacts for a specific event
+    const importContacts = async (eventId) => {
+        try {
+            await axios.get(`${SERVER_URL}/contact/import-from-google-sheets/${eventId}`);
+            console.log('Contact data import initiated');
+            // You can handle success or provide feedback to the user here
+        } catch (error) {
+            console.error('Error importing contact data:', error);
+            // Handle the error or provide feedback to the user here
+        }
+    };
+
     const value = {
         eventContacts,
         fetchContacts,
         createContact,
         updateContact,
         deleteContact,
+        importContacts, // Add the importContacts function
     };
 
     useEffect(() => {
@@ -69,7 +82,6 @@ export function ContactProvider({ children, initialEventId }) {
           fetchContacts(initialEventId);
         }
       }, [initialEventId]);
-      
 
     return (
         <ContactContext.Provider value={value}>

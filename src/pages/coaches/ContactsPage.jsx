@@ -20,7 +20,7 @@ import Pagination from "@mui/material/Pagination";
 const ContactsPage = () => {
   const { eventId } = useParams();
   const navigate = useNavigate(); // Updated usage
-  const { contacts, fetchContacts } = useContacts();
+  const { contacts, fetchContacts, importContacts  } = useContacts();
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("");
@@ -44,9 +44,18 @@ const ContactsPage = () => {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+  const handleImportContacts = () => {
+    importContacts(eventId); // Initiates the import of event contacts
+  };
 
   if (!contacts) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Button variant="contained" color="primary" onClick={handleImportContacts}>
+          Import Event Contacts
+        </Button>
+      </div>
+    );
   }
 
   // Function to filter contacts by search query
