@@ -22,6 +22,7 @@ import MenuOpenOutlinedIcon from "@mui/icons-material/MenuOpenOutlined";
 import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
 import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
+import EventIcon from "@mui/icons-material/Event"; // Add an event icon
 
 const Sidebar = () => {
   const theme = useTheme();
@@ -29,28 +30,12 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Agency Dashboard");
   const [view, setView] = useState("agency"); // 'agency' or 'event'
-  const [clients, setClients] = useState([]);
-  const [selectedClient, setSelectedClient] = useState("");
+  const [events, setEvents] = useState([]); // Store events
+  const [selectedEvent, setSelectedEvent] = useState(""); // Store selected event ID
 
   const navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
   const { logOutUser } = useContext(AuthContext);
-
-  useEffect(() => {
-    // Fetch the list of clients from your server
-    axios
-      .get(`${SERVER_URL}/client`)
-      .then((response) => {
-        setClients(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching clients:", error);
-      });
-  }, []);
-
-  const handleLogout = () => {
-    logOutUser();
-  };
 
   const getCapitalizedRole = () => {
     if (currentUser && currentUser.role) {
@@ -61,16 +46,33 @@ const Sidebar = () => {
     return "Role";
   };
 
-  const handleToggleView = () => {
-    setView(view === "agency" ? "event" : "agency");
-    setSelectedClient(""); // Reset selected client when switching views
+  useEffect(() => {
+    // Fetch the list of events from your server
+    axios
+      .get(`${SERVER_URL}/event`) // Adjust the API endpoint to fetch events
+      .then((response) => {
+        setEvents(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching events:", error);
+      });
+  }, []);
+
+  const handleLogout = () => {
+    logOutUser();
   };
 
-  const handleClientChange = (event) => {
-    const selectedClientName = event.target.value;
-    setSelectedClient(selectedClientName);
+  const handleEventSelect = (eventId) => {
+    setSelectedEvent(eventId); // Set the selected event ID
     setView("event"); // Switch to the "Event View"
-    setSelected(selectedClientName); // Update the selected state
+    setSelected(eventId); // Update the selected state to the event's name (optional)
+  
+    // Log the eventId and the URL before navigating
+    console.log("Selected Event ID:", eventId);
+    const url = `/contact/${eventId}`;
+    console.log("Navigating to URL:", url);
+  
+    navigate(url); // Navigate to the desired route with the event ID
   };
 
   const getMenuItems = () => {
@@ -97,22 +99,21 @@ const Sidebar = () => {
       {
         title: "Events",
         to: "/events",
-        icon: <DashboardIcon />,
+        icon: <EventIcon />, // Use the event icon
       },
       {
         title: "Contacts",
-        to: "/contacts",
         icon: <ContactsOutlinedIcon />,
       },
       { title: "Event Links", to: "/event-links", icon: <LinkOutlinedIcon /> },
     ];
 
-    // Add a menu item to go back to the Agency View if a client is selected
-    if (selectedClient) {
+    // Add a menu item to go back to the Agency View if an event is selected
+    if (selectedEvent) {
       eventItems.unshift({
-        title: `Back to ${selectedClient}`,
+        title: `Back to ${selectedEvent}`,
         onClick: () => {
-          setSelectedClient(""); // Clear the selected client
+          setSelectedEvent(""); // Clear the selected event
           setView("agency"); // Switch back to the "Agency View"
           setSelected("Agency View"); // Update the selected state
         },
@@ -196,9 +197,9 @@ const Sidebar = () => {
 
           <SubMenu
             title={
-              !isCollapsed && (selectedClient || view === "agency")
-                ? selectedClient || "Agency View"
-                : "Select Client"
+              !isCollapsed && (selectedEvent || view === "agency")
+                ? selectedEvent || "Agency View"
+                : "Select Event" // Change "Select Client" to "Select Event"
             }
             icon={<SwitchAccountIcon />}
             style={{ color: colors.grey[100] }}
@@ -206,7 +207,7 @@ const Sidebar = () => {
             {/* Add the "Agency View" option */}
             <MenuItem
               onClick={() => {
-                setSelectedClient(""); // Clear the selected client
+                setSelectedEvent(""); // Clear the selected event
                 setView("agency"); // Switch to the "Agency View"
                 setSelected("Agency View"); // Update the selected state
               }}
@@ -214,14 +215,14 @@ const Sidebar = () => {
             >
               Agency View
             </MenuItem>
-            {clients.map((client) => (
+            {events.map((event) => (
               <MenuItem
-                key={client.id}
-                onClick={handleClientChange}
-                value={client.name}
+                key={event.id}
+                onClick={() => handleEventSelect(event._id)} // Handle event selection
+                value={event.name}
                 style={{ color: colors.grey[400] }}
               >
-                {client.name}
+                {event.name}
               </MenuItem>
             ))}
           </SubMenu>
@@ -268,16 +269,12 @@ const Sidebar = () => {
             icon={<ExitToAppOutlinedIcon />}
           />
         </Menu>
-
-                        {/* Switch to Dashboard
-                        Online Training
-                        Settings
-                        Event History
-                        Personal Stats */}
       </ProSidebar>
     </Box>
   );
 };
 
 export default Sidebar;
+
+
 

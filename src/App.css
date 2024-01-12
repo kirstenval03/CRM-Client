@@ -52,6 +52,10 @@ body,
   margin: 10px;
   border-radius: 5px; /* Add rounded corners */
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  width: 100vh; /* Set a fixed width for the event card */
+  height: 200px; /* Set a fixed height for the event card */
+  display: inline-block; /* Make the cards appear in a row */
+  vertical-align: top; /* Align cards at the top in a row */
 }
 
 /* Style for the "See Details" button */
@@ -68,3 +72,4 @@ body,
 .event-card button:hover {
   background-color: #68d7dd; /* Darken the color on hover */
 }
+

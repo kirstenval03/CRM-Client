@@ -5,6 +5,8 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/auth.context";
 import { ClientProvider } from "./context/client.context.jsx";
+import { ContactProvider } from "./context/contact.context.jsx";
+
 
 import { EventProvider } from "./context/event.context.jsx";
 import { UserProvider } from "./context/user.context.jsx";
@@ -17,11 +19,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <AuthProvider>
         <UserProvider>
           <ClientProvider>
-          <EventProvider>
-            
+            <EventProvider>
+              <ContactProvider>
+
                 <App />
-              
-          </EventProvider>
+                
+              </ContactProvider>
+            </EventProvider>
           </ClientProvider>
         </UserProvider>
       </AuthProvider>

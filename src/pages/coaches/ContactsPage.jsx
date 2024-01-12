@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Updated import
+import { useParams } from 'react-router-dom';
+
+
 import { useContacts } from "../../context/contact.context";
 import {
   Table,
@@ -9,15 +12,14 @@ import {
   TableRow,
   Paper,
   Button,
-  Select,
-  MenuItem,
   TableSortLabel,
   TextField,
 } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 
 const ContactsPage = () => {
-  const history = useHistory();
+  const { eventId } = useParams();
+  const navigate = useNavigate(); // Updated usage
   const { contacts, fetchContacts } = useContacts();
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState("asc");
@@ -30,8 +32,8 @@ const ContactsPage = () => {
   };
 
   useEffect(() => {
-    fetchContacts();
-  }, []);
+    fetchContacts(eventId); // Fetch contacts for the current event when the component mounts
+  }, [eventId]); // Include eventId as a dependency
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -42,6 +44,10 @@ const ContactsPage = () => {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+
+  if (!contacts) {
+    return <div>Loading...</div>;
+  }
 
   // Function to filter contacts by search query
   const filteredContacts = contacts.filter(
@@ -142,13 +148,14 @@ const ContactsPage = () => {
           </TableHead>
           <TableBody>
             {displayContacts.map((contact) => (
-              <TableRow key={contact.id}>
+              <TableRow key={contact._id}>
                 <TableCell>{contact.name}</TableCell>
                 <TableCell>{contact.email}</TableCell>
                 <TableCell>{contact.phone}</TableCell>
                 <TableCell>{contact.source}</TableCell>
                 <TableCell>{contact.leadOrRegistrant}</TableCell>
-
+                <TableCell>{contact.assignedTo}</TableCell>
+                
                 {/* Add more table cells for additional contact properties */}
               </TableRow>
             ))}

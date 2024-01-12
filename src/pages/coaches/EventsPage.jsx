@@ -26,9 +26,10 @@ function EventsPage() {
       ) : (
         <div className="event-cards">
           {events.map((event) => (
-            <div key={event._id} className="event-card">
+            <div key={event._id} className="event-card square-card"> {/* Add square-card class */}
               <h2>{event.name}</h2>
-              <p>Date: {event.date}</p>
+              <p>Date: {new Date(event.date).toLocaleDateString()}</p> {/* Display formatted date */}
+              <p>Client: {event.client.clientName}</p> {/* Display the client name */}
               <button onClick={() => handleSeeDetails(event)}>See Details</button>
               <button onClick={() => handleUpdateClick(event)}>Update</button>
               <button

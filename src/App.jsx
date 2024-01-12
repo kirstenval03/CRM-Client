@@ -13,6 +13,8 @@ import TeamMembers from "./pages/agency/TeamMembers";
 import Clients from "./pages/agency/Clients";
 
 import EventsPage from "./pages/coaches/EventsPage";
+import ContactsPage from "./pages/coaches/ContactsPage"; // Import the ContactsPage component
+
 // import RegistrantsPage from "./pages/agency/RegistrantsPage";
 // import LeadsPage from "./pages/coaches/LeadsPage";
 // import CalendarPage from "./pages/coaches/CalendarPage";
@@ -66,9 +68,9 @@ function App() {
             <Route path="/team-members" element={<TeamMembers />} />
             <Route path="/clients" element={<Clients />} />
             
-            {/* <Route path="/customers" element={<RegistrantsPage/>}/> */}
-            {/* <Route path="/leads" element={<LeadsPage/>}/> */}
+        
            <Route path="/events" element={<EventsPage/>}/>
+           <Route path="/contact/:eventId" element={<ContactsPage />} /> 
             {/* <Route path="/calendar" element={<CalendarPage/>}/> */}
 
             {/* ... other routes ... */}
