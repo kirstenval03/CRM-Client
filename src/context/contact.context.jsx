@@ -15,7 +15,7 @@ export function ContactProvider({ children }) {
     // Fetch all contacts for the current event
     const fetchContacts = async (eventId) => {
         try {
-            const response = await axios.get(`${SERVER_URL}/contact/:${eventId}`);
+            const response = await axios.get(`${SERVER_URL}/contact/${eventId}`);
             setEventContacts(response.data);
         } catch (error) {
             console.error('Error fetching contacts:', error);
