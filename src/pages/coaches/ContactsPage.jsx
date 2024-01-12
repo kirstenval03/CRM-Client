@@ -122,6 +122,7 @@ const ContactsPage = () => {
         <Table>
           <TableHead>
             <TableRow>
+              {/* COLUMNS */}
               <TableCell>
                 <TableSortLabel
                   sx={{
@@ -137,6 +138,7 @@ const ContactsPage = () => {
                   Name
                 </TableSortLabel>
               </TableCell>
+
               <TableCell>
                 <TableSortLabel
                   sx={{
@@ -152,6 +154,71 @@ const ContactsPage = () => {
                   Email
                 </TableSortLabel>
               </TableCell>
+
+              <TableCell>
+                <TableSortLabel
+                  sx={{
+                    "& .MuiTableSortLabel-icon": {
+                      opacity: 1,
+                      visibility: "visible",
+                    },
+                  }}
+                  active={orderBy === "phone"}
+                  direction={orderBy === "phone" ? order : "asc"}
+                  onClick={() => handleSort("phone")}
+                >
+                  Phone
+                </TableSortLabel>
+              </TableCell>
+
+              <TableCell>
+                <TableSortLabel
+                  sx={{
+                    "& .MuiTableSortLabel-icon": {
+                      opacity: 1,
+                      visibility: "visible",
+                    },
+                  }}
+                  active={orderBy === "source"}
+                  direction={orderBy === "source" ? order : "asc"}
+                  onClick={() => handleSort("source")}
+                >
+                  Source
+                </TableSortLabel>
+              </TableCell>
+
+              <TableCell>
+                <TableSortLabel
+                  sx={{
+                    "& .MuiTableSortLabel-icon": {
+                      opacity: 1,
+                      visibility: "visible",
+                    },
+                  }}
+                  active={orderBy === "coachName"}
+                  direction={orderBy === "coachName" ? order : "asc"}
+                  onClick={() => handleSort("coachName")}
+                >
+                  Coach
+                </TableSortLabel>
+              </TableCell>
+
+              <TableCell>
+                <TableSortLabel
+                  sx={{
+                    "& .MuiTableSortLabel-icon": {
+                      opacity: 1,
+                      visibility: "visible",
+                    },
+                  }}
+                  active={orderBy === "coachEmail"}
+                  direction={orderBy === "coachEmail" ? order : "asc"}
+                  onClick={() => handleSort("coachEmail")}
+                >
+                  Coach Email
+                </TableSortLabel>
+              </TableCell>
+              
               {/* Add more table columns as needed */}
             </TableRow>
           </TableHead>
@@ -162,8 +229,8 @@ const ContactsPage = () => {
                 <TableCell>{contact.email}</TableCell>
                 <TableCell>{contact.phone}</TableCell>
                 <TableCell>{contact.source}</TableCell>
-                <TableCell>{contact.leadOrRegistrant}</TableCell>
-                <TableCell>{contact.assignedTo}</TableCell>
+                <TableCell>{contact.coachName}</TableCell>
+                <TableCell>{contact.coachEmail}</TableCell>
                 
                 {/* Add more table cells for additional contact properties */}
               </TableRow>
