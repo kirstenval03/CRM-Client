@@ -4,23 +4,28 @@ import { useState } from "react";
 import { ColorModeContext, useMode } from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 
+//LOGIN & CREATE USER
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 
+//TOP & SIDEBAR
+import Sidebar from "./pages/global/Sidebar";
+import Topbar from "./pages/global/Topbar";
+
+//ADMIN
 import HomePage from "./pages/Home";
 import AgencyDashboard from "./pages/agency/agencyDashPage";
 import TeamMembers from "./pages/agency/TeamMembers";
 import Clients from "./pages/agency/Clients";
 
+//EVENTS
 import EventsPage from "./pages/coaches/EventsPage";
 import ContactsPage from "./pages/coaches/ContactsPage"; // Import the ContactsPage component
 
-// import RegistrantsPage from "./pages/agency/RegistrantsPage";
-// import LeadsPage from "./pages/coaches/LeadsPage";
-// import CalendarPage from "./pages/coaches/CalendarPage";
 
-import Sidebar from "./pages/global/Sidebar";
-import Topbar from "./pages/global/Topbar";
+// ACADEMY
+import AcademyModules from "./pages/academy/academyModules";
+import AcademyLessonPage from "./pages/academy/academyLesson";
 
 function App() {
   const getToken = () => {
@@ -70,8 +75,12 @@ function App() {
             
         
            <Route path="/events" element={<EventsPage/>}/>
-           <Route path="/contact/:eventId" element={<ContactsPage />} /> 
-            {/* <Route path="/calendar" element={<CalendarPage/>}/> */}
+           <Route path="/contact/:eventId" element={<ContactsPage />} />
+
+          {/* Add Academy-related routes */}
+          <Route path="/academy" element={<AcademyModules />} />
+            <Route path="/modules/:moduleId/lessons/:lessonId" element={<AcademyLessonPage />} />
+           
 
             {/* ... other routes ... */}
           </Route>
