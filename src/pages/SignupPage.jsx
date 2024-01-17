@@ -11,6 +11,8 @@ function SignUpPage() {
     password: "",
     firstName: "",
     lastName: "",
+    phoneNumber: "",
+    position:"",
   });
 
   const [errorMessage, setErrorMessage] = useState(undefined);
@@ -69,6 +71,22 @@ function SignUpPage() {
           value={user.email}
           onChange={handleTextChange}
           required
+        />
+
+        <label htmlFor="phoneNumber">Phone Number</label>
+        <input
+          type="phoneNumber"
+          name="phoneNumber"
+          value={user.phoneNumber}
+          onChange={handleTextChange}
+        />
+
+        <label htmlFor="position">Position</label>
+        <input
+          type="position"
+          name="position"
+          value={user.position}
+          onChange={handleTextChange}
         />
 
         <label htmlFor="password">Password</label>
