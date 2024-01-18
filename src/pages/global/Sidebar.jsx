@@ -62,16 +62,16 @@ const Sidebar = () => {
     logOutUser();
   };
 
-  const handleEventSelect = (eventId) => {
+  const handleEventSelect = (eventId, eventName) => {
     setSelectedEvent(eventId); // Set the selected event ID
     setView("event"); // Switch to the "Event View"
-    setSelected(eventId); // Update the selected state to the event's name (optional)
-
+    setSelected(eventName); // Update the selected state to the event's name
+  
     // Log the eventId and the URL before navigating
     console.log("Selected Event ID:", eventId);
     const url = `/contact/${eventId}`;
     console.log("Navigating to URL:", url);
-
+  
     navigate(url); // Navigate to the desired route with the event ID
   };
 
@@ -97,11 +97,6 @@ const Sidebar = () => {
 
     const eventItems = [
       {
-        title: "Events",
-        to: "/events",
-        icon: <EventIcon />, // Use the event icon
-      },
-      {
         title: "Contacts",
         icon: <ContactsOutlinedIcon />,
       },
@@ -109,25 +104,14 @@ const Sidebar = () => {
     ];
 
     // Add a menu item to go back to the Agency View if an event is selected
-    if (selectedEvent) {
-      eventItems.unshift({
-        title: `Back to Agency View`,
-        onClick: () => {
-          setSelectedEvent(""); // Clear the selected event
-          setView("agency"); // Switch back to the "Agency View"
-          setSelected("Agency View"); // Update the selected state
-        },
-        icon: <DashboardIcon />,
-      });
-    }
-
+   
     const selectedEventName =
       events.find((event) => event._id === selectedEvent)?.name || ""; // Find the event name by ID
 
     // Modify the menu item title to show the selected event name inside the dropdown
     const selectEventMenuItem = {
       title: selectedEventName || "Select Event",
-      icon: <EventIcon />,
+     
     };
 
     return view === "agency"
@@ -234,15 +218,14 @@ const Sidebar = () => {
           >
             {/* Add the "Agency View" option */}
             {events.map((event) => (
-              <MenuItem
-                key={event._id}
-                onClick={() => handleEventSelect(event._id)} // Handle event selection
-                value={event.name}
-                style={{ color: colors.grey[400] }}
-              >
-                {event.name}
-              </MenuItem>
-            ))}
+  <MenuItem
+    key={event._id}
+    onClick={() => handleEventSelect(event._id)} // Pass the event ID
+    style={{ color: colors.grey[400] }}
+  >
+    {event.name}
+  </MenuItem>
+))}
           </SubMenu>
 
           {!isCollapsed && currentUser && (
