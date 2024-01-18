@@ -1,6 +1,10 @@
 import React, { useContext } from "react";
-import { UserContext } from "../../context/user.context"; // Import UserContext
-import { Box, Typography, useTheme } from "@mui/material";
+import { UserContext } from "../../context/user.context";
+import {
+  Box,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -8,6 +12,7 @@ import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
 
 import Header from "../../components/Header";
+
 
 const TeamMembers = () => {
   const theme = useTheme();
@@ -22,6 +27,7 @@ const TeamMembers = () => {
       headerName: "Name",
       flex: 1,
       cellClassName: "name-column--cell",
+      headerClassName: "id-column-header",
     },
     {
       field: "role",
@@ -56,7 +62,7 @@ const TeamMembers = () => {
           <Box
             width="100%"
             m="0 auto"
-            p="5px"
+            p="1vh"
             display="flex"
             justifyContent="left"
             backgroundColor={backgroundColor}
@@ -74,16 +80,15 @@ const TeamMembers = () => {
     },
   ];
 
-  const { allUsers } = useContext(UserContext); // Access allUsers from UserContext
+  const { allUsers } = useContext(UserContext);
 
-  // Map allUsers to the structure required by DataGrid
   const rows = allUsers.map((user) => ({
-    id: user._id, // Use a unique identifier for each user
-    name: `${user.firstName} ${user.lastName}`, // Combine first name and last name
+    id: user._id,
+    name: `${user.firstName} ${user.lastName}`,
     role: user.position,
     email: user.email,
     phone: user.phoneNumber,
-    accessLevel: user.role, // Map user roles as needed
+    accessLevel: user.role,
   }));
 
   return (
@@ -115,14 +120,16 @@ const TeamMembers = () => {
             backgroundColor: colors.blueAccent[700],
           },
           "& .MuiCheckbox-root": {
-            color: `${colors.greenAccent[200]} !important`,
+            display: "none", // Hide the checkbox column
           },
         }}
       >
-        <DataGrid checkboxSelection rows={rows} columns={columns} />
+        <DataGrid rows={rows} columns={columns} />
       </Box>
     </Box>
   );
 };
 
 export default TeamMembers;
+
+

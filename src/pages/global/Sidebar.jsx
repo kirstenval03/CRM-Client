@@ -66,12 +66,12 @@ const Sidebar = () => {
     setSelectedEvent(eventId); // Set the selected event ID
     setView("event"); // Switch to the "Event View"
     setSelected(eventId); // Update the selected state to the event's name (optional)
-  
+
     // Log the eventId and the URL before navigating
     console.log("Selected Event ID:", eventId);
     const url = `/contact/${eventId}`;
     console.log("Navigating to URL:", url);
-  
+
     navigate(url); // Navigate to the desired route with the event ID
   };
 
@@ -111,7 +111,7 @@ const Sidebar = () => {
     // Add a menu item to go back to the Agency View if an event is selected
     if (selectedEvent) {
       eventItems.unshift({
-        title: `Back to ${selectedEvent}`,
+        title: `Back to Agency View`,
         onClick: () => {
           setSelectedEvent(""); // Clear the selected event
           setView("agency"); // Switch back to the "Agency View"
@@ -121,7 +121,21 @@ const Sidebar = () => {
       });
     }
 
-    return view === "agency" ? agencyItems : eventItems;
+    const selectedEventName =
+      events.find((event) => event._id === selectedEvent)?.name || ""; // Find the event name by ID
+
+    // Modify the menu item title to show the selected event name inside the dropdown
+    const selectEventMenuItem = {
+      title: selectedEventName || "Select Event",
+      icon: <EventIcon />,
+    };
+
+    return view === "agency"
+      ? agencyItems
+      : [
+          selectEventMenuItem, // Include the modified select event menu item
+          ...eventItems,
+        ];
   };
 
   const menuItems = getMenuItems();
@@ -195,6 +209,20 @@ const Sidebar = () => {
             )}
           </MenuItem>
 
+          {/* Add "Switch to Agency View" button here */}
+          {view === "event" && (
+            <MenuItem
+              onClick={() => {
+                setSelectedEvent(""); // Clear the selected event
+                setView("agency"); // Switch to the "Agency View"
+                setSelected("Agency View"); // Update the selected state
+              }}
+              style={{ color: colors.grey[400] }}
+            >
+              Switch to Agency View
+            </MenuItem>
+          )}
+
           <SubMenu
             title={
               !isCollapsed && (selectedEvent || view === "agency")
@@ -205,19 +233,9 @@ const Sidebar = () => {
             style={{ color: colors.grey[100] }}
           >
             {/* Add the "Agency View" option */}
-            <MenuItem
-              onClick={() => {
-                setSelectedEvent(""); // Clear the selected event
-                setView("agency"); // Switch to the "Agency View"
-                setSelected("Agency View"); // Update the selected state
-              }}
-              style={{ color: colors.grey[400] }}
-            >
-              Agency View
-            </MenuItem>
             {events.map((event) => (
               <MenuItem
-                key={event.id}
+                key={event._id}
                 onClick={() => handleEventSelect(event._id)} // Handle event selection
                 value={event.name}
                 style={{ color: colors.grey[400] }}
@@ -275,6 +293,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
-
 

@@ -15,6 +15,7 @@
     "@mui/icons-material": "^5.15.0",
     "@mui/material": "^5.15.0",
     "@mui/x-data-grid": "^6.18.5",
+    "@mui/x-data-grid-pro": "^6.18.7",
     "@vimeo/player": "^2.21.0",
     "axios": "^1.6.2",
     "moment": "^2.29.4",

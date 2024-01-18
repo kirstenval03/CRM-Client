@@ -73,3 +73,11 @@ body,
   background-color: #68d7dd; /* Darken the color on hover */
 }
 
+
+
+.id-column-header {
+  /* Adjust the width as needed */
+  min-width: 100px; /* Minimum width */
+  max-width: 200px; /* Maximum width */
+  width: 150px; /* Initial width */
+}
