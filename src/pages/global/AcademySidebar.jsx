@@ -5,6 +5,7 @@ import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, Typography, useTheme, IconButton } from "@mui/material";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
+import { AuthContext } from "../../context/auth.context";
 
 // Import necessary icons for Academy members
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -20,6 +21,7 @@ const AcademySidebar = () => {
   const [selected, setSelected] = useState("Academy Dashboard");
   const navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
+  const { logOutUser } = useContext(AuthContext);
 
   const academyMenuItems = [
     {
@@ -29,7 +31,7 @@ const AcademySidebar = () => {
     },
     {
       title: "Curriculum",
-      to: "/curriculum",
+      to: "/academy-curriculum",
       icon: <BookIcon />,
     },
     {
@@ -37,24 +39,20 @@ const AcademySidebar = () => {
       icon: <ExitToAppIcon />,
     },
   ];
-
+  const handleLogout = () => {
+    logOutUser();
+  };
+  
   const handleMenuItemClick = (menuItem) => {
     setSelected(menuItem.title);
     if (menuItem.title === "LogOut") {
-      logOutUser(); // Handle logout
+        handleLogout(); // Handle logout
     } else {
       navigate(menuItem.to);
     }
   };
 
-  const logOutUser = () => {
-    // Implement your logout logic here
-    // For example, clear authentication token or user data from local storage
-    // You may need to create a logOutUser function in your context
-    localStorage.removeItem("authToken"); // Clear the authentication token
-    // Additional logout logic can be added here, such as clearing user data
-    navigate("/login"); // Redirect to the login page or any desired route
-  };
+ 
 
   useEffect(() => {
     // Fetch user data or update user info if needed

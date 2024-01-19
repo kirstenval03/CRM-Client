@@ -90,7 +90,7 @@ function App() {
            <Route path="/contact/:eventId" element={<ContactsPage />} />
 
           {/* Add Academy-related routes */}
-          <Route path="/academy" element={<AcademyModules />} />
+          <Route path="/academy-curriculum" element={<AcademyModules />} />
             <Route path="/modules/:moduleId/lessons/:lessonId" element={<AcademyLessonPage />} />
            
 

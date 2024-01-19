@@ -4,9 +4,20 @@ import { useModuleContext } from '../../context/module.context';
 import { useLessonContext } from '../../context/lesson.context';
 
 import AddModule from '../../components/AddModule';
-import AddLesson from '../../components/AddLesson'; 
+import AddLesson from '../../components/AddLesson';
+import { AuthContext } from '../../context/auth.context';
 
 function AcademyModules() {
+  return (
+    <AuthContext.Consumer>
+      {(authContext) => (
+        <AcademyModulesInner authContext={authContext} />
+      )}
+    </AuthContext.Consumer>
+  );
+}
+
+function AcademyModulesInner({ authContext }) {
   const { modules, isLoading: isModuleLoading } = useModuleContext();
   const { lessons, isLoading: isLessonLoading } = useLessonContext();
 
@@ -35,13 +46,17 @@ function AcademyModules() {
     return <div>Loading curriculum...</div>;
   }
 
+  const userRole = authContext.user ? authContext.user.role : '';
+
   return (
     <div>
       <h1>Curriculum</h1>
 
-      <div>
-        <button onClick={openAddModuleModal}>Create Module</button>
-      </div>
+      {userRole === 'admin' && (
+        <div>
+          <button onClick={openAddModuleModal}>Create Module</button>
+        </div>
+      )}
 
       {modules.length === 0 ? (
         <div>
@@ -53,12 +68,14 @@ function AcademyModules() {
             <h2>{module.name}</h2>
             <ul>
               {module.lessons.map((lesson) => (
-                 <li key={lesson._id}>
-                 <Link to={`/modules/${module._id}/lessons/${lesson._id}`}>{lesson.title}</Link>
-               </li>
+                <li key={lesson._id}>
+                  <Link to={`/modules/${module._id}/lessons/${lesson._id}`}>{lesson.title}</Link>
+                </li>
               ))}
             </ul>
-            <button onClick={() => openAddLessonModal(module._id)}>Add Lesson</button>
+            {userRole === 'admin' && (
+              <button onClick={() => openAddLessonModal(module._id)}>Add Lesson</button>
+            )}
           </div>
         ))
       )}
