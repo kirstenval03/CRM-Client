@@ -81,3 +81,47 @@ body,
   max-width: 200px; /* Maximum width */
   width: 150px; /* Initial width */
 }
+
+
+/* AcademyModules.css */
+.modules-page h1 {
+  margin-left: 10px;
+}
+.module-container {
+  /* Set your desired background color */
+  border: 5px solid #a4cedc;
+  padding: 16px;
+  margin-bottom: 16px;
+  width: 90%;
+  border-radius: 5px;
+  margin-left: 10px;
+  font-size: 2vh;
+  color: rgb(29, 29, 29) !important; 
+  background-color: rgb(255, 255, 255);
+ 
+}
+
+.lessons-container{
+border-radius: 5px ;
+width: 90%;
+}
+
+.lesson-container{
+  background-color: #e4f2f4;
+}
+.lesson-link{
+  color: #667cbd;
+}
+
+.module-container h2 {
+  margin-bottom: 8px;
+}
+
+.module-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.module-container ul li {
+  margin-bottom: 4px;
+}
