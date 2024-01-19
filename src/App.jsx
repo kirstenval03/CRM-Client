@@ -1,8 +1,10 @@
 import "./App.css";
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { ColorModeContext, useMode } from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import { UserContext } from "./context/user.context"; 
+
 
 //LOGIN & CREATE USER
 import SignupPage from "./pages/SignupPage";
@@ -10,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 
 //TOP & SIDEBAR
 import Sidebar from "./pages/global/Sidebar";
+import AcademySidebar from "./pages/global/AcademySidebar";
 import Topbar from "./pages/global/Topbar";
 
 //ADMIN
@@ -33,11 +36,17 @@ function App() {
   };
 
   const LoggedIn = () => {
+    const { currentUser } = useContext(UserContext); // Get currentUser from context
+
     return getToken() ? (
       <div className="app">
-        <Sidebar />
+        {/* Conditional rendering of the sidebar based on the user's role */}
+        {currentUser && currentUser.role === "admin" && <Sidebar />}
+        {currentUser && currentUser.role === "academy_member" && <AcademySidebar />} {/* Import AcademySidebar */}
+        {/* {currentUser && currentUser.role === "sales_coach" && <SalesCoachSidebar />} */}
+        
         <main className="content">
-        <Topbar/>
+          <Topbar />
           <Outlet />
         </main>
       </div>
@@ -47,13 +56,16 @@ function App() {
   };
 
   const NotLoggedIn = () => {
-    return !getToken() ? 
-    <div>
-      <Topbar/>
-    <Outlet />
-     </div>
-    : <Navigate to="/" />;
+    return !getToken() ? (
+      <div>
+        <Topbar />
+        <Outlet />
+      </div>
+    ) : (
+      <Navigate to="/" />
+    );
   };
+
 
   const [theme, colorMode] = useMode();
 
