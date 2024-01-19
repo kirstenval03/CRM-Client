@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { SERVER_URL } from '../../services/SERVER_URL';
 import VimeoVideo from '../../components/VimeoVideo';
+import { Link } from 'react-router-dom';
+
 
 function AcademyLessonPage() {
   const { moduleId, lessonId } = useParams();
@@ -42,9 +44,16 @@ function AcademyLessonPage() {
   }
 
   return (
-    <div>
-      <h1>{lesson.title}</h1>
-      <VimeoVideo videoId={lesson.vimeoLink} /> {/* Pass the video ID as a prop */}
+    <div className="lesson-container2">
+      <h1 className="lesson-title2">{lesson.title}</h1>
+      <div className="video-container">
+        <VimeoVideo videoId={lesson.vimeoLink} /> {/* Pass the video ID as a prop */}
+      </div>
+      <div className="back-button-container">
+        <Link to="/academy-curriculum">
+          <button className="back-button">Go Back to Academy Curriculum</button>
+        </Link>
+      </div>
     </div>
   );
 }

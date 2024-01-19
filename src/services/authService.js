@@ -2,36 +2,37 @@ import axios from "axios";
 import { SERVER_URL } from "./SERVER_URL";
 
 const getToken = () => {
-  return localStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
+  console.log("Token from localStorage:", token); // Add this line for debugging
+  return token;
 };
 
-const createHeaders = (isE3 = false, isSalesCoach = false) => {
+const createHeaders = (userRole) => {
   const token = getToken();
   const headers = {};
 
   if (token) {
+    // Include the Authorization header with the token
     headers.Authorization = `Bearer ${token}`;
   }
 
-  if (isE3) {
-    headers["X-User-Role"] = "E3";
-  } else if (isSalesCoach) {
-    headers["X-User-Role"] = "SalesCoach";
+  if (userRole) {
+    headers["X-User-Role"] = userRole;
   }
 
   return headers;
 };
 
-export const get = (route, isE3 = false, isSalesCoach = false) => {
-  const headers = createHeaders(isE3, isSalesCoach);
+export const get = (route, userRole) => {
+  const headers = createHeaders(userRole);
 
   return axios.get(SERVER_URL + route, {
     headers: headers,
   });
 };
 
-export const post = (route, body, isE3 = false, isSalesCoach = false) => {
-  const headers = createHeaders(isE3, isSalesCoach);
+export const post = (route, body, userRole) => {
+  const headers = createHeaders(userRole);
 
   return axios.post(SERVER_URL + route, body, {
     headers: headers,

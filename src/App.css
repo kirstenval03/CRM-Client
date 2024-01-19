@@ -151,3 +151,50 @@ width: 90%;
   border-radius: 5px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
+
+/* CSS for the lesson container */
+.lesson-container2 {
+  background-color: #f0f0f0; /* Set your desired background color */
+  width: 90%;
+  margin-left: 30px;
+  padding: 20px; /* Add padding to create a rectangle */
+  text-align: center; /* Center-align content horizontally */
+  border-radius: 10px; /* Add rounded corners if desired */
+}
+
+/* CSS for the lesson title */
+.lesson-title2{
+  font-size: 24px; /* Set your desired font size */
+  margin: 10px 0; /* Add margin to separate the title from the video */
+}
+
+/* CSS for the video container */
+.video-container {
+  background-color: #ffffff; /* Set a different background color for the video container if desired */
+  padding: 20px; /* Add padding to create a rectangle for the video */
+  margin-top: 20px; /* Add margin to separate the video from the title */
+  border-radius: 10px; /* Add rounded corners if desired */
+  display: flex;
+  justify-content: center;
+}
+
+/* CSS for the back button container */
+.back-button-container {
+  text-align: center; /* Center-align the button */
+  margin-top: 20px; /* Add margin to separate the button from the video */
+}
+
+/* CSS for the back button */
+.back-button {
+  background-color: #007bff; /* Set your desired button background color */
+  color: #fff; /* Set your desired text color */
+  padding: 10px 20px; /* Add padding to the button */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px; /* Set your desired font size */
+}
+
+.back-button:hover {
+  background-color: #0056b3; /* Change the background color on hover */
+}

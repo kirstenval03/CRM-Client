@@ -27,6 +27,7 @@ import ContactsPage from "./pages/coaches/ContactsPage"; // Import the ContactsP
 
 
 // ACADEMY
+import AcademyDashboard from "./pages/academy/academyDashboard";
 import AcademyModules from "./pages/academy/academyModules";
 import AcademyLessonPage from "./pages/academy/academyLesson";
 
@@ -90,6 +91,7 @@ function App() {
            <Route path="/contact/:eventId" element={<ContactsPage />} />
 
           {/* Add Academy-related routes */}
+          <Route path="/academy-dashboard" element={<AcademyDashboard />} />
           <Route path="/academy-curriculum" element={<AcademyModules />} />
             <Route path="/modules/:moduleId/lessons/:lessonId" element={<AcademyLessonPage />} />
            
