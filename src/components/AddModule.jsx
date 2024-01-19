@@ -17,7 +17,7 @@ function AddModule({ closeModal }) {
   };
 
   return (
-    <div className="modal">
+    <div className="modal-overlay">
       <div className="modal-content">
         <h2>Create Module</h2>
         <form onSubmit={handleSubmit}>

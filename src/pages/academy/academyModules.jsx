@@ -2,20 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useModuleContext } from "../../context/module.context";
 import { useLessonContext } from "../../context/lesson.context";
-
 import AddModule from "../../components/AddModule";
 import AddLesson from "../../components/AddLesson";
-import { AuthContext } from "../../context/auth.context";
+import { UserContext } from "../../context/user.context"; // Import UserContext
 
 function AcademyModules() {
   return (
-    <AuthContext.Consumer>
-      {(authContext) => <AcademyModulesInner authContext={authContext} />}
-    </AuthContext.Consumer>
+    <UserContext.Consumer>
+      {(userContext) => <AcademyModulesInner userContext={userContext} />}
+    </UserContext.Consumer>
   );
 }
 
-function AcademyModulesInner({ authContext }) {
+function AcademyModulesInner({ userContext }) {
   const { modules, isLoading: isModuleLoading } = useModuleContext();
   const { lessons, isLoading: isLessonLoading } = useLessonContext();
 
@@ -67,7 +66,8 @@ function AcademyModulesInner({ authContext }) {
     return <div>Loading curriculum...</div>;
   }
 
-  const userRole = authContext.user ? authContext.user.role : "";
+  // Use userContext to access the user's role
+  const userRole = userContext.currentUser ? userContext.currentUser.role : "";
 
   return (
     <div className="modules-page">
@@ -98,14 +98,16 @@ function AcademyModulesInner({ authContext }) {
                       >
                         {lesson.title}
                       </Link>
-                      <input
-                        type="checkbox"
-                        className="lesson-checkbox"
-                        checked={checkboxes[module._id]?.[lesson._id] || false}
-                        onChange={() =>
-                          handleCheckboxChange(module._id, lesson._id)
-                        }
-                      />
+                      {userRole === "academy_member" && ( // Only render checkboxes for academy members
+                        <input
+                          type="checkbox"
+                          className="lesson-checkbox"
+                          checked={checkboxes[module._id]?.[lesson._id] || false}
+                          onChange={() =>
+                            handleCheckboxChange(module._id, lesson._id)
+                          }
+                        />
+                      )}
                     </li>
                   </div>
                 ))}
@@ -132,4 +134,5 @@ function AcademyModulesInner({ authContext }) {
 }
 
 export default AcademyModules;
+
 

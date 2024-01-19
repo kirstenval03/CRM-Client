@@ -28,7 +28,7 @@ function AddLesson({ closeModal, moduleId }) {
   };
 
   return (
-    <div className="modal">
+    <div className="modal-overlay">
       <div className="modal-content">
         <h2>Create Lesson</h2>
         <form onSubmit={handleSubmit}>
@@ -61,3 +61,4 @@ function AddLesson({ closeModal, moduleId }) {
 }
 
 export default AddLesson;
+

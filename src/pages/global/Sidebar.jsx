@@ -23,6 +23,7 @@ import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
 import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
 import EventIcon from "@mui/icons-material/Event"; // Add an event icon
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 
 const Sidebar = () => {
   const theme = useTheme();
@@ -92,6 +93,11 @@ const Sidebar = () => {
         title: "Event History",
         to: "/event-history",
         icon: <HistoryOutlinedIcon />,
+      },
+      {
+        title: "Academy",
+        to: "/academy-curriculum",
+        icon: <SchoolOutlinedIcon  />,
       },
     ];
 
