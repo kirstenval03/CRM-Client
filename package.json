@@ -27,6 +27,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-pro-sidebar": "^0.7.1",
+    "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.21.0"
   },
   "devDependencies": {

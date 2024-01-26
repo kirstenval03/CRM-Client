@@ -198,3 +198,62 @@ width: 90%;
 .back-button:hover {
   background-color: #0056b3; /* Change the background color on hover */
 }
+
+/* ACADEMY DASHBOARD */
+/* AcademyDashboard.css or your preferred CSS file */
+.academy-dashboard {
+  display: flex; /* Use flex to create two boxes next to each other */
+  padding: 5vh;
+  text-align: center;
+  justify-content: space-around;
+  height: 100%;
+}
+
+.carousel-container {
+  flex: 1; /* Take up 50% of the available space */
+  padding: 1px; /* Add some padding */
+}
+
+.user-progress {
+  flex: 1; /* Take up 50% of the available space */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+ 
+}
+.user-progress h1{
+  margin-top: 0px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  margin-bottom: 10px; /* Add margin-bottom to create spacing between legend items */
+}
+.progress-container{
+  display: flex;
+  flex-direction: column;
+}
+.legend-label {
+  font-weight: bold;
+}
+.legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+
+
+.go-to-curriculum-button {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 20px 20px;
+  background-color: #2196F3;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-right: 20px;
+}
+/* Rest of your existing CSS styles */
