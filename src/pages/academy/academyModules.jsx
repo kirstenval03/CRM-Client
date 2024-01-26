@@ -57,7 +57,7 @@ function AcademyModulesInner({ userContext }) {
     try {
       if (userContext.currentUser && userContext.currentUser._id) {
         const userId = userContext.currentUser._id;
-        const response = await axios.get(`/progress/user-progress/${userId}`);
+        const response = await axios.get(`${SERVER_URL}/progress/user-progress/${userId}`);
         setUserProgress(response.data);
       } else {
         // Handle the case where the user is not authenticated or the user ID is not available
@@ -75,25 +75,25 @@ function AcademyModulesInner({ userContext }) {
         [lessonId]: !checkboxes[moduleId]?.[lessonId],
       },
     };
-
+  
     setCheckboxes(updatedCheckboxes);
     localStorage.setItem("checkboxes", JSON.stringify(updatedCheckboxes));
-
+  
     try {
       if (userContext.currentUser && userContext.currentUser._id) {
         const userId = userContext.currentUser._id;
-
+  
         // Construct the complete URL using SERVER_URL
-        const completeLessonURL = `${SERVER_URL}/progress/unmark-lesson/${lessonId}`;
-
+        const completeLessonURL = `${SERVER_URL}/progress/complete-lesson`; // Use the correct backend route
+        const unmarkLessonURL = `${SERVER_URL}/progress/unmark-lesson/${lessonId}`; // Use the correct backend route
+  
         // If the checkbox is unchecked, send a DELETE request instead of POST
         if (!updatedCheckboxes[moduleId]?.[lessonId]) {
           // Make an API request to unmark the lesson as completed using DELETE method
-          await axios.delete(completeLessonURL, {
+          await axios.delete(unmarkLessonURL, {
             headers: {
               Authorization: `Bearer ${authToken}`, // Use authToken from localStorage
             },
-            data: { userId }, // Include the data in the request body
           });
         } else {
           // If the checkbox is checked, send a POST request to mark the lesson as completed
@@ -107,7 +107,7 @@ function AcademyModulesInner({ userContext }) {
             }
           );
         }
-
+  
         // Fetch updated user progress after the API request
         fetchUserProgress();
       }
@@ -115,6 +115,7 @@ function AcademyModulesInner({ userContext }) {
       console.error("Error marking/unmarking lesson as completed:", error);
     }
   };
+  
 
   if (isModuleLoading || isLessonLoading) {
     return <div>Loading curriculum...</div>;
@@ -212,6 +213,7 @@ function AcademyModulesInner({ userContext }) {
 }
 
 export default AcademyModules;
+
 
 
 
