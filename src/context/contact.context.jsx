@@ -9,7 +9,6 @@ export function useContacts() {
 }
 
 export function ContactProvider({ children, initialEventId }) {
-    const [contacts, setContacts] = useState([]);
     const [eventContacts, setEventContacts] = useState([]); // Store contacts for the current event
 
     // Fetch all contacts for the current event
@@ -34,9 +33,9 @@ export function ContactProvider({ children, initialEventId }) {
     };
 
     // Update a contact's information
-    const updateContact = async (contactId, updatedContactData) => {
+    const updateContact = async (eventId, contactId, updatedContactData) => {
         try {
-            const response = await axios.post(`${SERVER_URL}/contact/contact-update/${contactId}`, updatedContactData);
+            const response = await axios.post(`${SERVER_URL}/contact/contact-update/${eventId}/${contactId}`, updatedContactData);
             const updatedContacts = eventContacts.map((contact) =>
                 contact._id === contactId ? response.data : contact
             );
@@ -69,6 +68,32 @@ export function ContactProvider({ children, initialEventId }) {
         }
     };
 
+// Update a contact's status color
+const handleColorChange = async (eventId, contactId, color) => {
+    try {
+      // Update the contact with the new color in the database
+      await axios.post(`${SERVER_URL}/contact/contact-update/${eventId}/${contactId}`, { statusColor: color });
+  
+      // Update the state with the updated contact data
+      const updatedContacts = eventContacts.map(contact =>
+        contact._id === contactId ? { ...contact, statusColor: color } : contact
+      );
+      setEventContacts(updatedContacts);
+  
+      // Update local storage with the new color setting for the contact
+      const storedColorSettings = JSON.parse(localStorage.getItem("contactColorSettings")) || {};
+      const updatedColorSettings = {
+        ...storedColorSettings,
+        [contactId]: color,
+      };
+      localStorage.setItem("contactColorSettings", JSON.stringify(updatedColorSettings));
+    } catch (error) {
+      console.error('Error updating contact status color:', error);
+    }
+  };
+  
+  
+
     const value = {
         eventContacts,
         fetchContacts,
@@ -76,6 +101,7 @@ export function ContactProvider({ children, initialEventId }) {
         updateContact,
         deleteContact,
         importContacts, // Add the importContacts function
+        handleColorChange, // Add the handleColorChange function
     };
 
     useEffect(() => {
@@ -93,4 +119,3 @@ export function ContactProvider({ children, initialEventId }) {
         </ContactContext.Provider>
     );
 }
-
