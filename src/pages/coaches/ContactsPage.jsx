@@ -11,8 +11,8 @@ import {
   Button,
   TableSortLabel,
   TextField,
-  MenuItem, // Import MenuItem component for dropdown menu
-  Select, // Import Select component for dropdown menu
+  MenuItem,
+  Select,
 } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 
@@ -62,10 +62,9 @@ const ContactsPage = () => {
 
   const filteredContacts = eventContacts.filter(
     (contact) =>
-      (contact.name?.toLowerCase() || '').includes(searchQuery) ||
-      (contact.email?.toLowerCase() || '').includes(searchQuery)
+      (contact.name?.toLowerCase() || "").includes(searchQuery) ||
+      (contact.email?.toLowerCase() || "").includes(searchQuery)
   );
-  
 
   const sortArray = (array, comparator) => {
     const stabilizedThis = array.map((el, index) => [el, index]);
@@ -91,6 +90,16 @@ const ContactsPage = () => {
       return 1;
     }
     return 0;
+  };
+
+  const pastelColors = {
+    green: "#D9EAD3",
+    yellow: "#FFFDCC",
+    red: "#F4CCCC",
+  };
+
+  const mapColorToPastel = (color) => {
+    return pastelColors[color] || "";
   };
 
   const sortedAndFilteredContacts = sortArray(
@@ -221,7 +230,12 @@ const ContactsPage = () => {
           </TableHead>
           <TableBody>
             {displayContacts.map((contact) => (
-              <TableRow key={contact._id}>
+              <TableRow
+                key={contact._id}
+                style={{
+                  backgroundColor: mapColorToPastel(contact.statusColor) || "",
+                }}
+              >
                 <TableCell>{contact.name}</TableCell>
                 <TableCell>{contact.email}</TableCell>
                 <TableCell>{contact.phone}</TableCell>
@@ -231,12 +245,12 @@ const ContactsPage = () => {
                 <TableCell>
                   {/* Dropdown menu for selecting color */}
                   <Select
-  value={contact.statusColor || ''}
-  onChange={(event) =>
-    handleColorChange(eventId, contact._id, event.target.value)
-  }
->
-                    <MenuItem value="">None</MenuItem> 
+                    value={contact.statusColor || ""}
+                    onChange={(event) =>
+                      handleColorChange(eventId, contact._id, event.target.value)
+                    }
+                  >
+                    <MenuItem value="">None</MenuItem>
                     <MenuItem value="green">Green</MenuItem>
                     <MenuItem value="yellow">Yellow</MenuItem>
                     <MenuItem value="red">Red</MenuItem>
