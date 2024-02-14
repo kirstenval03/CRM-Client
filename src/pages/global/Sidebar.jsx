@@ -76,6 +76,20 @@ const Sidebar = () => {
     navigate(url); // Navigate to the desired route with the event ID
   };
 
+
+  const handleEventLinksSelect = (eventId, eventName) => {
+    setSelectedEvent(eventId); // Set the selected event ID for event links
+    setView("event"); // Switch to the "Event View"
+    setSelected(eventName); // Update the selected state to the event's name for event links
+  
+    // Log the eventId and the URL before navigating to event links
+    console.log("Selected Event ID for Event Links:", eventId);
+    const url = `/links/${eventId}`;
+    console.log("Navigating to URL for Event Links:", url);
+  
+    navigate(url); // Navigate to the desired route with the event ID for event links
+  };
+
   const getMenuItems = () => {
     const agencyItems = [
       {
@@ -105,8 +119,9 @@ const Sidebar = () => {
       {
         title: "Contacts",
         icon: <ContactsOutlinedIcon />,
+        onClick: () => handleEventSelect(selectedEvent, selected) 
       },
-      { title: "Event Links", to: "/event-links", icon: <LinkOutlinedIcon /> },
+      { title: "Event Links", icon: <LinkOutlinedIcon />, onClick: () => handleEventLinksSelect(selectedEvent, selected) },
     ];
 
     // Add a menu item to go back to the Agency View if an event is selected

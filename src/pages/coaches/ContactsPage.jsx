@@ -25,8 +25,9 @@ const ContactsPage = () => {
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("");
-  const rowsPerPage = 10;
+  const [rowsPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filterColor, setFilterColor] = useState(""); // State for filter color
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
@@ -48,6 +49,10 @@ const ContactsPage = () => {
 
   const handleImportContacts = () => {
     importContacts(eventId);
+  };
+
+  const handleColorFilterChange = (event) => {
+    setFilterColor(event.target.value); // Update filter color state
   };
 
   if (!eventContacts || eventContacts.length === 0) {
@@ -91,21 +96,29 @@ const ContactsPage = () => {
     }
     return 0;
   };
-
-  const pastelColors = {
-    green: "#D9EAD3",
-    yellow: "#FFFDCC",
-    red: "#F4CCCC",
+  const filterContactsByColor = (contacts, color) => {
+    if (!color) return contacts; // If no color is selected, return all contacts
+    console.log("Contacts:", contacts);
+    return contacts.filter((contact) => {
+      console.log("Contact:", contact);
+      console.log("Contact status color:", contact.statusColor);
+      return contact.statusColor === color || !contact.statusColor; // Include contacts with the selected color or those without a color
+    });
   };
-
   const mapColorToPastel = (color) => {
+    const pastelColors = {
+      green: "#D9EAD3",
+      yellow: "#FFFDCC",
+      red: "#F4CCCC",
+    };
     return pastelColors[color] || "";
   };
 
-  const sortedAndFilteredContacts = sortArray(
-    filteredContacts,
-    getComparator(order, orderBy)
+  const sortedAndFilteredContacts = filterContactsByColor(
+    sortArray(filteredContacts, getComparator(order, orderBy)),
+    filterColor // Apply color filter
   );
+
   const totalPage = Math.ceil(sortedAndFilteredContacts.length / rowsPerPage);
   const displayContacts = sortedAndFilteredContacts.slice(
     (page - 1) * rowsPerPage,
@@ -124,6 +137,19 @@ const ContactsPage = () => {
         style={{ marginLeft: "10px" }}
         onChange={handleSearchChange}
       />
+
+      {/* Dropdown for filtering by color */}
+      <Select
+        value={filterColor}
+        onChange={handleColorFilterChange}
+        variant="outlined"
+        style={{ marginLeft: "10px" }}
+      >
+        <MenuItem value="">All Colors</MenuItem>
+        <MenuItem value="green">Green</MenuItem>
+        <MenuItem value="yellow">Yellow</MenuItem>
+        <MenuItem value="red">Red</MenuItem>
+      </Select>
 
       <Paper style={{ marginTop: "10px", overflowX: "auto" }}>
         <Table>
@@ -273,3 +299,5 @@ const ContactsPage = () => {
 };
 
 export default ContactsPage;
+
+
