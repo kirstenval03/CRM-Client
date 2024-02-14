@@ -83,6 +83,57 @@ body,
 }
 
 
+
+/* LOGIN PAGE  */
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ 
+}
+
+.logimg{
+  max-height: 82vh;
+}
+
+.login-container {
+  flex: 1; /* This allows the form to grow and occupy the space */
+  max-width: 400px; /* Limits the width of the form */
+  padding: 20px; /* Adds some padding around the form */
+  background-color: #0e6399;
+  height: 81vh;
+}
+
+.login-header h2 {
+  margin-bottom: 0.em;
+}
+
+.login-header p {
+  margin-bottom: 2em;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form input {
+  margin-bottom: 2em;
+  padding: 0.6em;
+}
+
+
+.login-button {
+  background-color: #6200ee;
+  color: white;
+  padding: 1em;
+  border: none;
+  cursor: pointer;
+}
+
+
+
 /* AcademyModules.css */
 .modules-page h1 {
   margin-left: 10px;

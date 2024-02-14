@@ -27,7 +27,6 @@ const ContactsPage = () => {
   const [orderBy, setOrderBy] = useState("");
   const rowsPerPage = 10;
   const [searchQuery, setSearchQuery] = useState("");
-  const [updatedContacts, setUpdatedContacts] = useState([]);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
@@ -36,28 +35,6 @@ const ContactsPage = () => {
   useEffect(() => {
     fetchContacts(eventId);
   }, [eventId]);
-
-  useEffect(() => {
-    if (eventContacts && eventContacts.length > 0) {
-      // Retrieve color settings from local storage
-      const storedColorSettings = JSON.parse(localStorage.getItem("contactColorSettings")) || {};
-      // Apply the color settings to the contacts
-      const updatedContacts = eventContacts.map((contact) => ({
-        ...contact,
-        statusColor: storedColorSettings[contact._id] || "", // Use color from local storage if available
-      }));
-      // Update the state with the updated contacts
-      setUpdatedContacts(updatedContacts);
-
-      // Update local storage with default color settings for contacts that don't have any
-      eventContacts.forEach((contact) => {
-        if (!storedColorSettings[contact._id]) {
-          storedColorSettings[contact._id] = ""; // Set default color setting
-        }
-      });
-      localStorage.setItem("contactColorSettings", JSON.stringify(storedColorSettings));
-    }
-  }, [eventContacts]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -83,28 +60,11 @@ const ContactsPage = () => {
     );
   }
 
-  const filteredContacts = updatedContacts.filter(
+  const filteredContacts = eventContacts.filter(
     (contact) =>
-      (contact.name?.toLowerCase() || "").includes(searchQuery) ||
-      (contact.email?.toLowerCase() || "").includes(searchQuery)
+      (contact.name?.toLowerCase() || '').includes(searchQuery) ||
+      (contact.email?.toLowerCase() || '').includes(searchQuery)
   );
-
-  const handleColorChangeAndUpdateStorage = (contactId, color) => {
-    try {
-      // Update the color setting for the contact in local storage
-      const storedColorSettings = JSON.parse(localStorage.getItem("contactColorSettings")) || {};
-      const updatedColorSettings = {
-        ...storedColorSettings,
-        [contactId]: color,
-      };
-      localStorage.setItem("contactColorSettings", JSON.stringify(updatedColorSettings));
-  
-      // Update the statusColor for the contact in the local state using the context
-      handleColorChange(eventId, contactId, color);
-    } catch (error) {
-      console.error('Error updating contact status color:', error);
-    }
-  };
   
 
   const sortArray = (array, comparator) => {
@@ -133,9 +93,15 @@ const ContactsPage = () => {
     return 0;
   };
 
-  const sortedAndFilteredContacts = sortArray(filteredContacts, getComparator(order, orderBy));
+  const sortedAndFilteredContacts = sortArray(
+    filteredContacts,
+    getComparator(order, orderBy)
+  );
   const totalPage = Math.ceil(sortedAndFilteredContacts.length / rowsPerPage);
-  const displayContacts = sortedAndFilteredContacts.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+  const displayContacts = sortedAndFilteredContacts.slice(
+    (page - 1) * rowsPerPage,
+    page * rowsPerPage
+  );
 
   return (
     <div style={{ margin: "10px" }}>
@@ -255,7 +221,7 @@ const ContactsPage = () => {
           </TableHead>
           <TableBody>
             {displayContacts.map((contact) => (
-              <TableRow key={contact._id} style={{ backgroundColor: contact.statusColor }}>
+              <TableRow key={contact._id}>
                 <TableCell>{contact.name}</TableCell>
                 <TableCell>{contact.email}</TableCell>
                 <TableCell>{contact.phone}</TableCell>
@@ -265,15 +231,15 @@ const ContactsPage = () => {
                 <TableCell>
                   {/* Dropdown menu for selecting color */}
                   <Select
-                    value={contact.statusColor || ""}
-                    onChange={(event) =>
-                      handleColorChangeAndUpdateStorage(contact._id, event.target.value)
-                    }
-                  >
-                    <MenuItem value="">None</MenuItem>
-                    <MenuItem value="#D9EAD3">Green</MenuItem>
-                    <MenuItem value="#FFFDCC">Yellow</MenuItem>
-                    <MenuItem value="#F4CCCC">Red</MenuItem>
+  value={contact.statusColor || ''}
+  onChange={(event) =>
+    handleColorChange(eventId, contact._id, event.target.value)
+  }
+>
+                    <MenuItem value="">None</MenuItem> 
+                    <MenuItem value="green">Green</MenuItem>
+                    <MenuItem value="yellow">Yellow</MenuItem>
+                    <MenuItem value="red">Red</MenuItem>
                   </Select>
                 </TableCell>
               </TableRow>
@@ -293,4 +259,3 @@ const ContactsPage = () => {
 };
 
 export default ContactsPage;
-
