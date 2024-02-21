@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useEventContext } from '../../context/event.context';
 import EventForm from '../../components/EventForm';
+import EventDetails from '../../components/EventDetails';
 
 function EventsPage() {
   const { events, isLoading, createEvent, updateEvent, deleteEvent } = useEventContext();
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null); // State to store the selected event for details
 
   const handleSeeDetails = (event) => {
-    console.log('Event Details:', event);
+    setSelectedEvent(event); // Set the selected event when "See Details" button is clicked
   };
 
   return (
@@ -46,6 +48,7 @@ function EventsPage() {
           ))}
         </div>
       )}
+      {selectedEvent && <EventDetails event={selectedEvent} />} {/* Render EventDetails component if a selected event exists */}
     </div>
   );
 }

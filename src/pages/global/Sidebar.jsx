@@ -105,7 +105,7 @@ const Sidebar = () => {
       },
       {
         title: "Event History",
-        to: "/event-history",
+        to: "/events",
         icon: <HistoryOutlinedIcon />,
       },
       {

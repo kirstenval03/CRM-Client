@@ -86,12 +86,16 @@ const ContactsPage = () => {
       ? (a, b) => descendingComparator(a[orderBy], b[orderBy])
       : (a, b) => -descendingComparator(a[orderBy], b[orderBy]);
   };
-
+  
   const descendingComparator = (a, b) => {
-    if (b < a) {
+    // Convert coachName values to lowercase for consistent sorting
+    const lowerCaseA = typeof a === 'string' ? a.toLowerCase() : a;
+    const lowerCaseB = typeof b === 'string' ? b.toLowerCase() : b;
+  
+    if (lowerCaseB < lowerCaseA) {
       return -1;
     }
-    if (b > a) {
+    if (lowerCaseB > lowerCaseA) {
       return 1;
     }
     return 0;
@@ -163,11 +167,27 @@ const ContactsPage = () => {
                       visibility: "visible",
                     },
                   }}
-                  active={orderBy === "name"}
-                  direction={orderBy === "name" ? order : "asc"}
-                  onClick={() => handleSort("name")}
+                  active={orderBy === "firstName"}
+                  direction={orderBy === "firstName" ? order : "asc"}
+                  onClick={() => handleSort("firstName")}
                 >
-                  Name
+                  First Name
+                </TableSortLabel>
+              </TableCell>
+
+              <TableCell>
+                <TableSortLabel
+                  sx={{
+                    "& .MuiTableSortLabel-icon": {
+                      opacity: 1,
+                      visibility: "visible",
+                    },
+                  }}
+                  active={orderBy === "lastName"}
+                  direction={orderBy === "lastName" ? order : "asc"}
+                  onClick={() => handleSort("lastName")}
+                >
+                  Last Name
                 </TableSortLabel>
               </TableCell>
 
@@ -211,11 +231,27 @@ const ContactsPage = () => {
                       visibility: "visible",
                     },
                   }}
-                  active={orderBy === "source"}
-                  direction={orderBy === "source" ? order : "asc"}
-                  onClick={() => handleSort("source")}
+                  active={orderBy === "ticketRevenue"}
+                  direction={orderBy === "ticketRevenue" ? order : "asc"}
+                  onClick={() => handleSort("ticketRevenue")}
                 >
-                  Source
+                  Ticket Revenue
+                </TableSortLabel>
+              </TableCell>
+
+              <TableCell>
+                <TableSortLabel
+                  sx={{
+                    "& .MuiTableSortLabel-icon": {
+                      opacity: 1,
+                      visibility: "visible",
+                    },
+                  }}
+                  active={orderBy === "vip"}
+                  direction={orderBy === "vip" ? order : "asc"}
+                  onClick={() => handleSort("vip")}
+                >
+                  VIP
                 </TableSortLabel>
               </TableCell>
 
@@ -231,23 +267,7 @@ const ContactsPage = () => {
                   direction={orderBy === "coachName" ? order : "asc"}
                   onClick={() => handleSort("coachName")}
                 >
-                  Coach
-                </TableSortLabel>
-              </TableCell>
-
-              <TableCell>
-                <TableSortLabel
-                  sx={{
-                    "& .MuiTableSortLabel-icon": {
-                      opacity: 1,
-                      visibility: "visible",
-                    },
-                  }}
-                  active={orderBy === "coachEmail"}
-                  direction={orderBy === "coachEmail" ? order : "asc"}
-                  onClick={() => handleSort("coachEmail")}
-                >
-                  Coach Email
+                  Coach 
                 </TableSortLabel>
               </TableCell>
 
@@ -262,12 +282,14 @@ const ContactsPage = () => {
                   backgroundColor: mapColorToPastel(contact.statusColor) || "",
                 }}
               >
-                <TableCell>{contact.name}</TableCell>
+                <TableCell>{contact.firstName}</TableCell>
+                <TableCell>{contact.lastName}</TableCell>
                 <TableCell>{contact.email}</TableCell>
                 <TableCell>{contact.phone}</TableCell>
-                <TableCell>{contact.source}</TableCell>
+                <TableCell>{contact.ticketRevenue}</TableCell>
+                <TableCell>{contact.vip}</TableCell>
                 <TableCell>{contact.coachName}</TableCell>
-                <TableCell>{contact.coachEmail}</TableCell>
+          
                 <TableCell>
                   {/* Dropdown menu for selecting color */}
                   <Select
