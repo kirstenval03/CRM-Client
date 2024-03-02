@@ -22,8 +22,9 @@ import MenuOpenOutlinedIcon from "@mui/icons-material/MenuOpenOutlined";
 import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
 import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
-import EventIcon from "@mui/icons-material/Event"; // Add an event icon
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
+import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 
 const Sidebar = () => {
   const theme = useTheme();
@@ -191,7 +192,7 @@ const Sidebar = () => {
         <Menu iconShape="square">
           <MenuItem
             onClick={() => setIsCollapsed(!isCollapsed)}
-            icon={isCollapsed ? <MenuOpenOutlinedIcon /> : undefined}
+            icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
             style={{
               margin: "10px 0 20px 0",
               color: colors.grey[100],
@@ -215,15 +216,16 @@ const Sidebar = () => {
           {/* Add "Switch to Agency View" button here */}
           {view === "event" && (
             <MenuItem
-              onClick={() => {
-                setSelectedEvent(""); // Clear the selected event
-                setView("agency"); // Switch to the "Agency View"
-                setSelected("Agency View"); // Update the selected state
-              }}
-              style={{ color: colors.grey[400] }}
-            >
-              Switch to Agency View
-            </MenuItem>
+            onClick={() => {
+              setSelectedEvent(""); // Clear the selected event
+              setView("agency"); // Switch to the "Agency View"
+              setSelected("Agency View"); // Update the selected state
+            }}
+            style={{ color: colors.grey[400] }}
+            icon={<AutorenewOutlinedIcon />} // Add the icon here
+          >
+            Switch to Agency View
+          </MenuItem>
           )}
 
 <SubMenu
