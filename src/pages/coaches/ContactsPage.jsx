@@ -110,8 +110,12 @@ const ContactsPage = ({ contacts }) => {
   };
   const filterContactsByColor = (contacts, color) => {
     if (!color) return contacts; // If no color is selected, return all contacts
-    return contacts.filter(contact => color === '' || contact.statusColor === color);
+    return contacts.filter(contact => 
+      color === '' || // If no color filter is selected, return all contacts
+      contact.statusColor.includes(color) // Check if the contact's statusColor array includes the selected color
+    );
   };
+  
   
   const mapColorToPastel = (color) => {
     const pastelColors = {
