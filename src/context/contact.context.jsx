@@ -33,18 +33,20 @@ export function ContactProvider({ children, initialEventId }) {
         }
     };
 
-    // Update a contact's information
-    const updateContact = async (contactId, updatedContactData) => {
-        try {
-            const response = await axios.post(`${SERVER_URL}/contact/contact-update/${contactId}`, updatedContactData);
-            const updatedContacts = eventContacts.map((contact) =>
-                contact._id === contactId ? response.data : contact
-            );
-            setEventContacts(updatedContacts);
-        } catch (error) {
-            console.error('Error updating contact:', error);
-        }
-    };
+// Update a contact's information
+const updateContact = async (eventId, contactId, updatedContactData) => {
+    try {
+        const response = await axios.post(`${SERVER_URL}/contact/contact-update/${eventId}/${contactId}`, updatedContactData);
+        const updatedContacts = eventContacts.map((contact) =>
+            contact._id === contactId ? response.data : contact
+        );
+        setEventContacts(updatedContacts);
+    } catch (error) {
+        console.error('Error updating contact:', error);
+    }
+};
+
+
 
     // Delete a contact
     const deleteContact = async (contactId) => {

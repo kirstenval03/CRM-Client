@@ -22,6 +22,7 @@ function EventForm({ onClose }) {
     edition: 1,
     date: '',
     driveFolder: '',
+    spreadsheetID: '',
     active: true,
     coaches: [],
     clientId: '', // Add clientId to associate the event with a client
@@ -70,6 +71,7 @@ function EventForm({ onClose }) {
       edition: newEvent.edition,
       date: newEvent.date,
       driveFolder: newEvent.driveFolder,
+      spreadsheetID: newEvent.spreadsheetID,
       active: newEvent.active,
       coaches: newEvent.coaches,
     };
@@ -124,6 +126,17 @@ function EventForm({ onClose }) {
             type="text"
             name="driveFolder"
             value={newEvent.driveFolder}
+            onChange={handleInputChange}
+            required
+          />
+        </label>
+        <br />
+        <label>
+          Spreadsheet ID:
+          <input
+            type="text"
+            name="spreadsheetID"
+            value={newEvent.spreadsheetID}
             onChange={handleInputChange}
             required
           />

@@ -25,6 +25,7 @@ import Clients from "./pages/agency/Clients";
 import EventsPage from "./pages/coaches/EventsPage";
 import ContactsPage from "./pages/coaches/ContactsPage"; // Import the ContactsPage component
 import LinksPage from "./pages/coaches/linksPage";
+import KanbanBoardPage from "./pages/coaches/KanbanBoard";
 
 // ACADEMY
 import AcademyDashboard from "./pages/academy/academyDashboard";
@@ -90,6 +91,8 @@ function App() {
            <Route path="/events" element={<EventsPage/>}/>
            <Route path="/contact/:eventId" element={<ContactsPage />} />
            <Route path="/links/:eventId" element={<LinksPage />} />
+           <Route path="/contact/board/:eventId" element={<KanbanBoardPage />} />
+
 
           {/* Add Academy-related routes */}
           <Route path="/academy-dashboard" element={<AcademyDashboard />} />

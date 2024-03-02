@@ -204,9 +204,7 @@ const Sidebar = () => {
                 alignItems="center"
                 ml="15px"
               >
-                <Typography variant="h3" color={colors.grey[500]}>
-                  E3-CRM
-                </Typography>
+               
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOpenOutlinedIcon />
                 </IconButton>
@@ -228,26 +226,27 @@ const Sidebar = () => {
             </MenuItem>
           )}
 
-          <SubMenu
-            title={
-              !isCollapsed && (selectedEvent || view === "agency")
-                ? selectedEvent || "Agency View"
-                : "Select Event" // Change "Select Client" to "Select Event"
-            }
-            icon={<SwitchAccountIcon />}
-            style={{ color: colors.grey[100] }}
-          >
-            {/* Add the "Agency View" option */}
-            {events.map((event) => (
-  <MenuItem
-    key={event._id}
-    onClick={() => handleEventSelect(event._id)} // Pass the event ID
-    style={{ color: colors.grey[400] }}
-  >
-    {event.name}
-  </MenuItem>
-))}
-          </SubMenu>
+<SubMenu
+  title={
+    !isCollapsed && (selectedEvent || view === "agency")
+      ? (selectedEvent ? events.find((event) => event._id === selectedEvent)?.name || "Select Event" : "Select Event")
+      : "Select Event"
+  }
+  icon={<SwitchAccountIcon />}
+  style={{ color: colors.grey[100] }}
+>
+  {/* Add the "Agency View" option */}
+  {events.map((event) => (
+    <MenuItem
+      key={event._id}
+      onClick={() => handleEventSelect(event._id, event.name)} // Pass both the event ID and name
+      style={{ color: colors.grey[400] }}
+    >
+      {event.name}
+    </MenuItem>
+  ))}
+</SubMenu>
+
 
           {!isCollapsed && currentUser && (
             <Box mb="25px">
