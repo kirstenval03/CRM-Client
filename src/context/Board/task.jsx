@@ -2,10 +2,6 @@ import React, { createContext, useState, useContext } from 'react';
 import axios from 'axios';
 import { SERVER_URL } from '../../services/SERVER_URL';
 
-import React, { createContext, useState, useContext } from 'react';
-import axios from 'axios';
-import { SERVER_URL } from '../../services/SERVER_URL';
-
 // Create the context
 const TaskContext = createContext();
 
@@ -19,8 +15,8 @@ export const TaskProvider = ({ children }) => {
   // Function to fetch all tasks within a column
   const fetchColumnTasks = async (boardId, columnId) => {
     try {
-      const response = await axios.get(`${SERVER_URL}/task/${boardId}/column/${columnId}`);
-      setTasks(response.data);
+      const response = await axios.get(`${SERVER_URL}/board/${boardId}/column/${columnId}`);
+      setTasks(response.data.tasks); // Adjusted to retrieve tasks directly from the response
     } catch (error) {
       console.error('Error fetching column tasks:', error);
     }
@@ -29,8 +25,8 @@ export const TaskProvider = ({ children }) => {
   // Function to create a new task
   const createTask = async (boardId, columnId, contactId, indexPosition) => {
     try {
-      const response = await axios.post(`${SERVER_URL}/task/${boardId}/column/${columnId}`, { contactId, indexPosition });
-      setTasks([...tasks, response.data]);
+      const response = await axios.post(`${SERVER_URL}/board/${boardId}/column/${columnId}`, { contactId, indexPosition });
+      setTasks([...tasks, response.data]); // Adjusted to update tasks with the new task
     } catch (error) {
       console.error('Error creating task:', error);
     }
@@ -39,7 +35,7 @@ export const TaskProvider = ({ children }) => {
   // Function to update an existing task
   const updateTask = async (boardId, columnId, taskId, contactId, indexPosition) => {
     try {
-      const response = await axios.put(`${SERVER_URL}/task/${boardId}/column/${columnId}/${taskId}`, { contactId, indexPosition });
+      const response = await axios.put(`${SERVER_URL}/board/${boardId}/column/${columnId}/${taskId}`, { contactId, indexPosition });
       const updatedTasks = tasks.map((task) => (task._id === taskId ? response.data : task));
       setTasks(updatedTasks);
     } catch (error) {
@@ -50,7 +46,7 @@ export const TaskProvider = ({ children }) => {
   // Function to delete a task
   const deleteTask = async (boardId, columnId, taskId) => {
     try {
-      await axios.delete(`${SERVER_URL}/task/${boardId}/column/${columnId}/${taskId}`);
+      await axios.delete(`${SERVER_URL}/board/${boardId}/column/${columnId}/${taskId}`);
       const updatedTasks = tasks.filter((task) => task._id !== taskId);
       setTasks(updatedTasks);
     } catch (error) {

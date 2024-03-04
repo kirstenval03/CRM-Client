@@ -24,17 +24,6 @@ export function ContactProvider({ children, initialEventId }) {
         }
     };
 
-    // Fetch contacts specifically for the board view
-    const fetchBoardContacts = async (eventId) => {
-        try {
-            const response = await axios.get(`${SERVER_URL}/contact/board/${eventId}`);
-            setBoardContacts(response.data); // Update board contacts state
-            console.log('Fetched board contacts:', response.data); // Add this line
-        } catch (error) {
-            console.error('Error fetching board contacts:', error);
-        }
-    };
-
     // Create a new contact for the current event
     const createContact = async (eventId, contactData) => {
         try {
@@ -116,8 +105,6 @@ export function ContactProvider({ children, initialEventId }) {
         deleteContact,
         importContacts, // Add the importContacts function
         handleColorChange, // Add the handleColorChange function
-        boardContacts, // Include boardContacts in the context value
-        fetchBoardContacts, // Include fetchBoardContacts function
     };
 
     useEffect(() => {
