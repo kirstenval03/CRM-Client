@@ -9,7 +9,6 @@ import Pagination from "@mui/material/Pagination";
 
 import { useContacts } from "../../context/contact.context";
 import ContactDetails from "../../components/ContactDetails";
-import KanbanBoardPage from "./KanbanBoard";
 
 
 const ContactsPage = ({ contacts }) => {
@@ -29,9 +28,6 @@ const ContactsPage = ({ contacts }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterColor, setFilterColor] = useState(""); // State for filter color
   const [selectedContact, setSelectedContact] = useState(null);
-  
-  
-
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
@@ -39,15 +35,16 @@ const ContactsPage = ({ contacts }) => {
 
   useEffect(() => {
     fetchContacts(eventId);
-  }, [eventId]);
+  }, []); // Empty dependency array so that it only runs once when the component mounts
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
+
   const handleSwitchToBoardView = () => {
     navigate(`/contact/board/${eventId}`);
-  };
+  };  
 
   const handleSort = (property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -156,7 +153,7 @@ const ContactsPage = ({ contacts }) => {
         Switch to Board View
       </Button>
       
-      <KanbanBoardPage eventId={eventId} />
+      
 
       <Button variant="contained" color="primary">
         Add Contact

@@ -11,6 +11,7 @@ export function useContacts() {
 export function ContactProvider({ children, initialEventId }) {
     const [contacts, setContacts] = useState([]);
     const [eventContacts, setEventContacts] = useState([]); // Store contacts for the current event
+    const [boardContacts, setBoardContacts] = useState([]); // Store contacts for the board view
 
     // Fetch all contacts for the current event
     const fetchContacts = async (eventId) => {
@@ -20,6 +21,17 @@ export function ContactProvider({ children, initialEventId }) {
             console.log('Fetched contacts:', response.data); // Add this line
         } catch (error) {
             console.error('Error fetching contacts:', error);
+        }
+    };
+
+    // Fetch contacts specifically for the board view
+    const fetchBoardContacts = async (eventId) => {
+        try {
+            const response = await axios.get(`${SERVER_URL}/contact/board/${eventId}`);
+            setBoardContacts(response.data); // Update board contacts state
+            console.log('Fetched board contacts:', response.data); // Add this line
+        } catch (error) {
+            console.error('Error fetching board contacts:', error);
         }
     };
 
@@ -33,20 +45,18 @@ export function ContactProvider({ children, initialEventId }) {
         }
     };
 
-// Update a contact's information
-const updateContact = async (eventId, contactId, updatedContactData) => {
-    try {
-        const response = await axios.post(`${SERVER_URL}/contact/contact-update/${eventId}/${contactId}`, updatedContactData);
-        const updatedContacts = eventContacts.map((contact) =>
-            contact._id === contactId ? response.data : contact
-        );
-        setEventContacts(updatedContacts);
-    } catch (error) {
-        console.error('Error updating contact:', error);
-    }
-};
-
-
+    // Update a contact's information
+    const updateContact = async (eventId, contactId, updatedContactData) => {
+        try {
+            const response = await axios.post(`${SERVER_URL}/contact/contact-update/${eventId}/${contactId}`, updatedContactData);
+            const updatedContacts = eventContacts.map((contact) =>
+                contact._id === contactId ? response.data : contact
+            );
+            setEventContacts(updatedContacts);
+        } catch (error) {
+            console.error('Error updating contact:', error);
+        }
+    };
 
     // Delete a contact
     const deleteContact = async (contactId) => {
@@ -106,16 +116,27 @@ const updateContact = async (eventId, contactId, updatedContactData) => {
         deleteContact,
         importContacts, // Add the importContacts function
         handleColorChange, // Add the handleColorChange function
+        boardContacts, // Include boardContacts in the context value
+        fetchBoardContacts, // Include fetchBoardContacts function
     };
 
     useEffect(() => {
         if (initialEventId) {
             console.log("Fetching contacts for event: ", initialEventId); // Add this line
-            fetchContacts(initialEventId);
+            Promise.all([fetchContacts(initialEventId), fetchBoardContacts(initialEventId)])
+                .then(([contactsRes, boardContactsRes]) => {
+                    // Handle the responses if needed
+                })
+                .catch(error => {
+                    console.error('Error fetching contacts:', error);
+                });
         }
     }, [initialEventId]);
+    
 
-    console.log("Updated eventContacts: ", eventContacts); // Add this line for debugging
+    // Console log for debugging
+    console.log("Updated eventContacts: ", eventContacts);
+    console.log("Updated boardContacts: ", boardContacts);
 
     return (
         <ContactContext.Provider value={value}>

@@ -6,14 +6,19 @@ import App from './App.jsx';
 import './index.css';
 
 import { AuthProvider } from './context/auth.context.jsx';
-import { ClientProvider } from './context/client.context.jsx'; // Corrected import path
-import { ContactProvider } from './context/contact.context.jsx'; // Corrected import path
-import { EventProvider } from './context/event.context.jsx'; // Corrected import path
-import { UserProvider } from './context/user.context.jsx'; // Corrected import path
+import { ClientProvider } from './context/client.context.jsx'; 
+import { ContactProvider } from './context/contact.context.jsx'; 
+import { EventProvider } from './context/event.context.jsx';
+import { UserProvider } from './context/user.context.jsx'; 
 
-// Import the modules and lessons contexts or modules here
-import { ModuleProvider } from './context/module.context.jsx'; // Replace with the actual import path
-import { LessonProvider } from './context/lesson.context.jsx'; // Replace with the actual import path
+//BOARD
+import { BoardProvider } from './context/Board/board.jsx';
+import { ColumnProvider } from './context/Board/column.jsx';
+import { TaskProvider } from './context/Board/task.jsx';
+
+//ACADEMY
+import { ModuleProvider } from './context/module.context.jsx'; 
+import { LessonProvider } from './context/lesson.context.jsx'; 
 
 function Main() {
   // Assuming you have a state variable to store the selected eventId
@@ -31,10 +36,18 @@ function Main() {
           <UserProvider>
             <ClientProvider>
               <EventProvider>
-                <ModuleProvider> {/* Use the modules context/provider */}
-                  <LessonProvider> {/* Use the lessons context/provider */}
+                <ModuleProvider> 
+                  <LessonProvider>
                     <ContactProvider initialEventId={selectedEventId}>
+                    <BoardProvider>
+                      <ColumnProvider>
+                        <TaskProvider>
+
                       <App handleEventSelection={handleEventSelection} />
+                    
+                          </TaskProvider>
+                        </ColumnProvider>
+                      </BoardProvider>
                     </ContactProvider>
                   </LessonProvider>
                 </ModuleProvider>

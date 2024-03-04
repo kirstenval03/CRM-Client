@@ -25,7 +25,7 @@ import Clients from "./pages/agency/Clients";
 import EventsPage from "./pages/coaches/EventsPage";
 import ContactsPage from "./pages/coaches/ContactsPage"; // Import the ContactsPage component
 import LinksPage from "./pages/coaches/linksPage";
-import KanbanBoardPage from "./pages/coaches/KanbanBoard";
+import KanbanBoardPage from "./pages/coaches/Board/KanbanBoard";
 
 // ACADEMY
 import AcademyDashboard from "./pages/academy/academyDashboard";
