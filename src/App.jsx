@@ -17,7 +17,6 @@ import Topbar from "./pages/global/Topbar";
 
 //ADMIN
 import HomePage from "./pages/Home";
-import AgencyDashboard from "./pages/agency/agencyDashPage";
 import TeamMembers from "./pages/agency/TeamMembers";
 import Clients from "./pages/agency/Clients";
 
@@ -83,7 +82,6 @@ function App() {
 
           <Route element={<LoggedIn />}>
             <Route path="/" element={<HomePage />} />
-            <Route path="/agency-dashboard" element={<AgencyDashboard />} />
             <Route path="/team-members" element={<TeamMembers />} />
             <Route path="/clients" element={<Clients />} />
             
