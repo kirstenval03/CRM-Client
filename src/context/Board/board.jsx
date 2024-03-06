@@ -13,20 +13,20 @@ export const BoardProvider = ({ children }) => {
   // State to hold the current user's board
   const [board, setBoard] = useState(null);
 
-  // Function to fetch the user's board from the backend
-  const fetchUserBoard = async (userId) => {
+  // Function to fetch the event board from the backend
+  const fetchEventBoard = async (eventId) => {
     try {
-      const response = await axios.get(`${SERVER_URL}/board/user/${userId}`);
+      const response = await axios.get(`${SERVER_URL}/board/event/${eventId}`);
       setBoard(response.data);
     } catch (error) {
-      console.error('Error fetching user board:', error);
+      console.error('Error fetching event board:', error);
     }
   };
 
   // Function to create a new board
-  const createBoard = async (userId, columns) => {
+  const createBoard = async (eventId, columns) => {
     try {
-      const response = await axios.post(`${SERVER_URL}/board`, { userId, columns });
+      const response = await axios.post(`${SERVER_URL}/board`, { eventId, columns });
       setBoard(response.data);
     } catch (error) {
       console.error('Error creating board:', error);
@@ -47,7 +47,7 @@ export const BoardProvider = ({ children }) => {
     <BoardContext.Provider
       value={{
         board,
-        fetchUserBoard,
+        fetchEventBoard,
         createBoard,
         updateBoard,
       }}

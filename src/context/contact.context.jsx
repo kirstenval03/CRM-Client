@@ -105,6 +105,7 @@ export function ContactProvider({ children, initialEventId }) {
         deleteContact,
         importContacts, // Add the importContacts function
         handleColorChange, // Add the handleColorChange function
+       
     };
 
     useEffect(() => {
