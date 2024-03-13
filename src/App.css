@@ -333,3 +333,14 @@ width: 90%;
   width: 90%; /* Responsive width */
   position: relative;
 }
+
+.clickable {
+  cursor: pointer; /* Change cursor to pointer on hover */
+ 
+}
+
+.clickable:hover {
+  color: rgb(36, 146, 255); /* Change text color to blue on hover (optional) */
+  text-decoration:underline;
+  font-weight: bold;
+}

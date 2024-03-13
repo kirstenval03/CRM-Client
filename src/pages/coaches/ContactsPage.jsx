@@ -152,20 +152,13 @@ const ContactsPage = ({ contacts }) => {
       >
         Switch to Board View
       </Button>
-      
-      
 
       <Button variant="contained" color="primary">
         Add Contact
       </Button>
 
-      <TextField
-        label="Search Contacts"
-        variant="outlined"
-        style={{ marginLeft: "10px" }}
-        onChange={handleSearchChange}
-      />
       {/* Dropdown for filtering by color */}
+
       <Select
         value={filterColor}
         onChange={handleColorFilterChange}
@@ -177,6 +170,13 @@ const ContactsPage = ({ contacts }) => {
         <MenuItem value="yellow">Yellow</MenuItem>
         <MenuItem value="red">Red</MenuItem>
       </Select>
+      <TextField
+        label="Search Contacts"
+        variant="outlined"
+        style={{ marginLeft: "10px" }}
+        onChange={handleSearchChange}
+      />
+
       <Paper style={{ marginTop: "10px", overflowX: "auto" }}>
         <Table>
           <TableHead>
@@ -274,24 +274,25 @@ const ContactsPage = ({ contacts }) => {
               <TableCell>Coach</TableCell>
               <TableCell>Status</TableCell>{" "}
               {/* Add column for color selection */}
-              <TableCell>Actions</TableCell> {/* Add column for actions */}
+             
             </TableRow>
           </TableHead>
           <TableBody>
             {displayContacts.map((contact) => (
               <TableRow
-                key={contact._id}
-                style={{
-                  backgroundColor: mapColorToPastel(contact.statusColor) || "",
-                }}
-              >
-                <TableCell>{contact.firstName}</TableCell>
-                <TableCell>{contact.lastName}</TableCell>
-                <TableCell>{contact.email}</TableCell>
-                <TableCell>{contact.phone}</TableCell>
-                <TableCell>{contact.ticketRevenue}</TableCell>
-                <TableCell>{contact.vip}</TableCell>
-                <TableCell>{contact.coachName}</TableCell>
+              key={contact._id}
+              style={{
+                backgroundColor: mapColorToPastel(contact.statusColor) || "",
+              }}
+              onDoubleClick={() => handleContactClick(contact)} // Add double click event handler here
+            >
+                <TableCell className="clickable">{contact.firstName} </TableCell>
+                <TableCell className="clickable">{contact.lastName}</TableCell>
+                <TableCell className="clickable">{contact.email}</TableCell>
+                <TableCell className="clickable">{contact.phone}</TableCell>
+                <TableCell className="clickable">{contact.ticketRevenue}</TableCell>
+                <TableCell className="clickable">{contact.vip}</TableCell>
+                <TableCell className="clickable">{contact.coachName}</TableCell>
                 <TableCell>
                   <Select
                     value={contact.statusColor || ""}
@@ -309,19 +310,22 @@ const ContactsPage = ({ contacts }) => {
                     <MenuItem value="red">Red</MenuItem>
                   </Select>
                 </TableCell>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleContactClick(contact)}
-                  >
-                    See Contact Details
-                  </Button>
-                </TableCell>
+               
               </TableRow>
             ))}
           </TableBody>
         </Table>
+      </Paper>
+
+      <div
+        style={{
+          marginTop: "10px",
+          overflowX: "auto",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <Pagination
           count={totalPage}
           page={page}
@@ -329,7 +333,17 @@ const ContactsPage = ({ contacts }) => {
           color="primary"
           style={{ padding: "20px" }}
         />
-      </Paper>
+
+        <div>
+          <div style={{ textAlign: "center" }}>
+            Total {eventContacts.length} records
+          </div>
+          <div style={{ textAlign: "center" }}>
+            {page} of {totalPage} Pages
+          </div>
+        </div>
+      </div>
+
       {/* Render ContactDetails component when a contact is selected */}
       {selectedContact && (
         <div className="overlay" onClick={handleCloseContactDetails}>
