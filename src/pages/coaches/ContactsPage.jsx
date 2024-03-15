@@ -23,7 +23,8 @@ import AddContactForm from "../../components/AddContact";
 const ContactsPage = ({ contacts }) => {
   const navigate = useNavigate();
   const { eventId } = useParams();
-  const { coaches, fetchEventCoaches } = useContacts(); 
+  const { fetchEventCoaches, fetchPipelineStatus, coaches, pipelineStatuses } = useContacts();
+
 
   // Add state to manage the visibility of the AddContactForm
   const [showAddContactForm, setShowAddContactForm] = useState(false);
@@ -50,6 +51,7 @@ const ContactsPage = ({ contacts }) => {
   const [filterColor, setFilterColor] = useState("");
   const [selectedContact, setSelectedContact] = useState(null);
   const [filterCoachName, setFilterCoachName] = useState("");
+  const [filterPipelineStatus, setFilterPipelineStatus] = useState("");
 
 
   //  CHANGE HANDLERS------------------------------
@@ -60,6 +62,7 @@ const ContactsPage = ({ contacts }) => {
   useEffect(() => {
     fetchContacts(eventId);
     fetchEventCoaches(eventId);
+    fetchPipelineStatus(eventId);
   }, []);
 
   const handleChangePage = (event, newPage) => {
@@ -88,6 +91,10 @@ const ContactsPage = ({ contacts }) => {
     setFilterCoachName(event.target.value);
   }; // Handler for coach name filter
 
+  const handlePipelineStatusFilterChange = (event) => {
+    setFilterPipelineStatus(event.target.value);
+  };
+
 
   if (!eventContacts || eventContacts.length === 0) {
     return (
@@ -106,8 +113,11 @@ const ContactsPage = ({ contacts }) => {
   const filteredContacts = eventContacts.filter(
     (contact) =>
       (contact.name?.toLowerCase() || "").includes(searchQuery) ||
-      (contact.email?.toLowerCase() || "").includes(searchQuery)
+      (contact.email?.toLowerCase() || "").includes(searchQuery) ||
+      (contact.pipelineStatus?.toLowerCase() || "").includes(filterPipelineStatus.toLowerCase())
   );
+  
+  
 
   const sortArray = (array, comparator) => {
     const stabilizedThis = array.map((el, index) => [el, index]);
@@ -159,12 +169,15 @@ const ContactsPage = ({ contacts }) => {
     sortArray(
       filteredContacts.filter(
         (contact) =>
-          contact.coachName.toLowerCase().includes(filterCoachName.toLowerCase())
+          contact.coachName.toLowerCase().includes(filterCoachName.toLowerCase()) &&
+          contact.pipelineStatus.toLowerCase().includes(filterPipelineStatus.toLowerCase())
       ),
       getComparator(order, orderBy)
     ),
     filterColor
   );
+  
+  
 
   const totalPage = Math.ceil(sortedAndFilteredContacts.length / rowsPerPage);
   const displayContacts = sortedAndFilteredContacts.slice(
@@ -205,7 +218,6 @@ const ContactsPage = ({ contacts }) => {
         </div>
 
         <div className="filters-container">
-          
           <Select
             value={filterColor}
             onChange={handleColorFilterChange}
@@ -217,9 +229,9 @@ const ContactsPage = ({ contacts }) => {
             <MenuItem value="yellow">Yellow</MenuItem>
             <MenuItem value="red">Red</MenuItem>
           </Select>
-          
+
           <Select
-            value={filterCoachName} // Set value to an empty string since you want to show all coaches by default
+            value={filterCoachName}
             onChange={handleCoachNameFilterChange}
             variant="outlined"
             style={{ marginLeft: "10px" }}
@@ -232,6 +244,20 @@ const ContactsPage = ({ contacts }) => {
             ))}
           </Select>
 
+          <Select
+            value={filterPipelineStatus}
+            onChange={handlePipelineStatusFilterChange}
+            variant="outlined"
+            style={{ marginLeft: "10px" }}
+          >
+            <MenuItem value="">All Statuses</MenuItem>
+            {pipelineStatuses.map((status, index) => (
+              <MenuItem key={index} value={status}>
+                {status}
+              </MenuItem>
+            ))}
+          </Select>
+
           <TextField
             label="Search Contacts"
             variant="outlined"
@@ -239,7 +265,6 @@ const ContactsPage = ({ contacts }) => {
             onChange={handleSearchChange}
           />
         </div>
-        
       </div>
 
       {/* Render AddContactForm component conditionally */}
@@ -339,32 +364,35 @@ const ContactsPage = ({ contacts }) => {
                   VIP
                 </TableSortLabel>
               </TableCell>
-              
               <TableCell>Coach</TableCell>
-
               <TableCell>Stage</TableCell>
               <TableCell>Color</TableCell>{" "}
               {/* Add column for color selection */}
-             
             </TableRow>
           </TableHead>
           <TableBody>
             {displayContacts.map((contact) => (
               <TableRow
-              key={contact._id}
-              style={{
-                backgroundColor: mapColorToPastel(contact.statusColor) || "",
-              }}
-              onDoubleClick={() => handleContactClick(contact)} // Add double click event handler here
-            >
-                <TableCell className="clickable">{contact.firstName} </TableCell>
+                key={contact._id}
+                style={{
+                  backgroundColor: mapColorToPastel(contact.statusColor) || "",
+                }}
+                onDoubleClick={() => handleContactClick(contact)} // Add double click event handler here
+              >
+                <TableCell className="clickable">
+                  {contact.firstName}{" "}
+                </TableCell>
                 <TableCell className="clickable">{contact.lastName}</TableCell>
                 <TableCell className="clickable">{contact.email}</TableCell>
                 <TableCell className="clickable">{contact.phone}</TableCell>
-                <TableCell className="clickable">{contact.ticketRevenue}</TableCell>
+                <TableCell className="clickable">
+                  {contact.ticketRevenue}
+                </TableCell>
                 <TableCell className="clickable">{contact.vip}</TableCell>
                 <TableCell className="clickable">{contact.coachName}</TableCell>
-                <TableCell className="clickable">{contact.pipelineStatus}</TableCell>
+                <TableCell className="clickable">
+                  {contact.pipelineStatus}
+                </TableCell>
                 <TableCell>
                   <Select
                     value={contact.statusColor || ""}
@@ -382,7 +410,6 @@ const ContactsPage = ({ contacts }) => {
                     <MenuItem value="red">Red</MenuItem>
                   </Select>
                 </TableCell>
-               
               </TableRow>
             ))}
           </TableBody>

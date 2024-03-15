@@ -11,6 +11,7 @@ export function useContacts() {
 export function ContactProvider({ children, initialEventId }) {
     const [eventContacts, setEventContacts] = useState([]); // Store contacts for the current event
     const [coaches, setCoaches] = useState([]);
+    const [pipelineStatuses, setPipelineStatuses] = useState([]);
 
 
     // Fetch all contacts for the current event
@@ -34,6 +35,18 @@ export function ContactProvider({ children, initialEventId }) {
             console.error('Error fetching coaches:', error);
         }
     };
+
+    // Fetch pipeline statuses for the current event
+    const fetchPipelineStatus = async (eventId) => {
+    try {
+        const response = await axios.get(`${SERVER_URL}/contact/pipeline-statuses/${eventId}`);
+        setPipelineStatuses(response.data.pipelineStatuses);
+        console.log('Fetched pipeline statuses:', response.data); // Add this line
+    } catch (error) {
+        console.error('Error fetching pipeline statuses:', error);
+    }
+};
+
 
 
     // Create a new contact for the current event
@@ -110,29 +123,36 @@ export function ContactProvider({ children, initialEventId }) {
     };
     
    const value = {
-        eventContacts,
-        fetchContacts,
-        fetchEventCoaches, 
-        coaches, 
-        createContact,
-        updateContact,
-        deleteContact,
-        importContacts,
-        handleColorChange,
-    };
+     eventContacts,
+     fetchContacts,
+     fetchEventCoaches,
+     fetchPipelineStatus, // Add this line
+     coaches,
+     pipelineStatuses,
+     createContact,
+     updateContact,
+     deleteContact,
+     importContacts,
+     handleColorChange,
+   };
 
-    useEffect(() => {
-        if (initialEventId) {
-            console.log("Fetching contacts and coaches for event: ", initialEventId);
-            Promise.all([fetchContacts(initialEventId), fetchEventCoaches(initialEventId)])
-                .then(([contactsRes, coachesRes]) => {
-                    // Handle the responses if needed
-                })
-                .catch(error => {
-                    console.error('Error fetching contacts and coaches:', error);
-                });
-        }
-    }, [initialEventId]);
+   useEffect(() => {
+    if (initialEventId) {
+        console.log("Fetching contacts, coaches, and pipeline statuses for event: ", initialEventId);
+        Promise.all([
+            fetchContacts(initialEventId),
+            fetchEventCoaches(initialEventId),
+            fetchPipelineStatus(initialEventId), // Add this line
+        ])
+            .then(([contactsRes, coachesRes, pipelineStatusesRes]) => {
+                // Handle the responses if needed
+            })
+            .catch(error => {
+                console.error('Error fetching contacts, coaches, and pipeline statuses:', error);
+            });
+    }
+}, [initialEventId]);
+
 
     // Console log for debugging
     console.log("Updated eventContacts: ", eventContacts);
