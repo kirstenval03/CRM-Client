@@ -2,18 +2,35 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import {
-  Table, TableBody, TableCell, TableHead, TableRow,
-  Paper, Button, TableSortLabel, TextField, MenuItem, Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  TableSortLabel,
+  TextField,
+  MenuItem,
+  Select,
 } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 
 import { useContacts } from "../../context/contact.context";
 import ContactDetails from "../../components/ContactDetails";
-
+import AddContactForm from "../../components/AddContact";
 
 const ContactsPage = ({ contacts }) => {
   const navigate = useNavigate();
   const { eventId } = useParams();
+
+  // Add state to manage the visibility of the AddContactForm
+  const [showAddContactForm, setShowAddContactForm] = useState(false);
+
+  // Toggle the visibility of the AddContactForm
+  const toggleAddContactForm = () => {
+    setShowAddContactForm(!showAddContactForm);
+  };
 
   const {
     eventContacts,
@@ -26,7 +43,7 @@ const ContactsPage = ({ contacts }) => {
   const [orderBy, setOrderBy] = useState("");
   const [rowsPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterColor, setFilterColor] = useState(""); // State for filter color
+  const [filterColor, setFilterColor] = useState("");
   const [selectedContact, setSelectedContact] = useState(null);
 
   const handleSearchChange = (event) => {
@@ -35,16 +52,15 @@ const ContactsPage = ({ contacts }) => {
 
   useEffect(() => {
     fetchContacts(eventId);
-  }, []); // Empty dependency array so that it only runs once when the component mounts
+  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-
   const handleSwitchToBoardView = () => {
     navigate(`/contact/board/${eventId}`);
-  };  
+  };
 
   const handleSort = (property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -57,13 +73,17 @@ const ContactsPage = ({ contacts }) => {
   };
 
   const handleColorFilterChange = (event) => {
-    setFilterColor(event.target.value); // Update filter color state
+    setFilterColor(event.target.value);
   };
 
   if (!eventContacts || eventContacts.length === 0) {
     return (
       <div>
-        <Button variant="contained" color="primary" onClick={handleImportContacts}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleImportContacts}
+        >
           Import Event Contacts
         </Button>
       </div>
@@ -91,12 +111,11 @@ const ContactsPage = ({ contacts }) => {
       ? (a, b) => descendingComparator(a[orderBy], b[orderBy])
       : (a, b) => -descendingComparator(a[orderBy], b[orderBy]);
   };
-  
+
   const descendingComparator = (a, b) => {
-    // Convert coachName values to lowercase for consistent sorting
-    const lowerCaseA = typeof a === 'string' ? a.toLowerCase() : a;
-    const lowerCaseB = typeof b === 'string' ? b.toLowerCase() : b;
-  
+    const lowerCaseA = typeof a === "string" ? a.toLowerCase() : a;
+    const lowerCaseB = typeof b === "string" ? b.toLowerCase() : b;
+
     if (lowerCaseB < lowerCaseA) {
       return -1;
     }
@@ -105,15 +124,15 @@ const ContactsPage = ({ contacts }) => {
     }
     return 0;
   };
+
   const filterContactsByColor = (contacts, color) => {
-    if (!color) return contacts; // If no color is selected, return all contacts
-    return contacts.filter(contact => 
-      color === '' || // If no color filter is selected, return all contacts
-      contact.statusColor.includes(color) // Check if the contact's statusColor array includes the selected color
+    if (!color) return contacts;
+    return contacts.filter(
+      (contact) =>
+        color === "" || contact.statusColor.includes(color)
     );
   };
-  
-  
+
   const mapColorToPastel = (color) => {
     const pastelColors = {
       green: "#D9EAD3",
@@ -122,12 +141,12 @@ const ContactsPage = ({ contacts }) => {
     };
     return pastelColors[color] || "";
   };
-  
+
   const sortedAndFilteredContacts = filterContactsByColor(
     sortArray(filteredContacts, getComparator(order, orderBy)),
-    filterColor // Apply color filter
+    filterColor
   );
-  
+
   const totalPage = Math.ceil(sortedAndFilteredContacts.length / rowsPerPage);
   const displayContacts = sortedAndFilteredContacts.slice(
     (page - 1) * rowsPerPage,
@@ -135,47 +154,57 @@ const ContactsPage = ({ contacts }) => {
   );
 
   const handleContactClick = (contact) => {
-    setSelectedContact(contact); // Set selected contact when clicked
+    setSelectedContact(contact);
   };
 
   const handleCloseContactDetails = () => {
-    setSelectedContact(null); // Close contact details when closed
+    setSelectedContact(null);
   };
-
 
   return (
     <div style={{ margin: "10px" }}>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => handleSwitchToBoardView(eventId)} // Pass the eventId to the handler
-      >
-        Switch to Board View
-      </Button>
+      <div className="contacts-topbar">
+        <div className="buttons-container">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleSwitchToBoardView(eventId)}
+          >
+            Switch to Board View
+          </Button>
 
-      <Button variant="contained" color="primary">
-        Add Contact
-      </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={toggleAddContactForm}
+          >
+            Add Contact
+          </Button>
+        </div>
 
-      {/* Dropdown for filtering by color */}
+        <div className="filters-container">
+          <Select
+            value={filterColor}
+            onChange={handleColorFilterChange}
+            variant="outlined"
+            style={{ marginLeft: "10px" }}
+          >
+            <MenuItem value="">All Colors</MenuItem>
+            <MenuItem value="green">Green</MenuItem>
+            <MenuItem value="yellow">Yellow</MenuItem>
+            <MenuItem value="red">Red</MenuItem>
+          </Select>
+          <TextField
+            label="Search Contacts"
+            variant="outlined"
+            style={{ marginLeft: "10px" }}
+            onChange={handleSearchChange}
+          />
+        </div>
+      </div>
 
-      <Select
-        value={filterColor}
-        onChange={handleColorFilterChange}
-        variant="outlined"
-        style={{ marginLeft: "10px" }}
-      >
-        <MenuItem value="">All Colors</MenuItem>
-        <MenuItem value="green">Green</MenuItem>
-        <MenuItem value="yellow">Yellow</MenuItem>
-        <MenuItem value="red">Red</MenuItem>
-      </Select>
-      <TextField
-        label="Search Contacts"
-        variant="outlined"
-        style={{ marginLeft: "10px" }}
-        onChange={handleSearchChange}
-      />
+      {/* Render AddContactForm component conditionally */}
+      {showAddContactForm && <AddContactForm onClose={toggleAddContactForm} />}
 
       <Paper style={{ marginTop: "10px", overflowX: "auto" }}>
         <Table>
