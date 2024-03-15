@@ -9,9 +9,9 @@ export function useContacts() {
 }
 
 export function ContactProvider({ children, initialEventId }) {
-    const [contacts, setContacts] = useState([]);
     const [eventContacts, setEventContacts] = useState([]); // Store contacts for the current event
-    const [boardContacts, setBoardContacts] = useState([]); // Store contacts for the board view
+    const [coaches, setCoaches] = useState([]);
+
 
     // Fetch all contacts for the current event
     const fetchContacts = async (eventId) => {
@@ -23,6 +23,18 @@ export function ContactProvider({ children, initialEventId }) {
             console.error('Error fetching contacts:', error);
         }
     };
+
+    // Fetch coaches for the current event
+    const fetchEventCoaches = async (eventId) => {
+        try {
+            const response = await axios.get(`${SERVER_URL}/contact/coaches/${eventId}`);
+            setCoaches(response.data.coaches);
+            console.log('Fetched coaches:', response.data); // Add this line
+        } catch (error) {
+            console.error('Error fetching coaches:', error);
+        }
+    };
+
 
     // Create a new contact for the current event
     const createContact = async (eventId, contactData) => {
@@ -97,34 +109,34 @@ export function ContactProvider({ children, initialEventId }) {
         }
     };
     
-    const value = {
+   const value = {
         eventContacts,
         fetchContacts,
+        fetchEventCoaches, 
+        coaches, 
         createContact,
         updateContact,
         deleteContact,
-        importContacts, // Add the importContacts function
-        handleColorChange, // Add the handleColorChange function
-       
+        importContacts,
+        handleColorChange,
     };
 
     useEffect(() => {
         if (initialEventId) {
-            console.log("Fetching contacts for event: ", initialEventId); // Add this line
-            Promise.all([fetchContacts(initialEventId), fetchBoardContacts(initialEventId)])
-                .then(([contactsRes, boardContactsRes]) => {
+            console.log("Fetching contacts and coaches for event: ", initialEventId);
+            Promise.all([fetchContacts(initialEventId), fetchEventCoaches(initialEventId)])
+                .then(([contactsRes, coachesRes]) => {
                     // Handle the responses if needed
                 })
                 .catch(error => {
-                    console.error('Error fetching contacts:', error);
+                    console.error('Error fetching contacts and coaches:', error);
                 });
         }
     }, [initialEventId]);
-    
 
     // Console log for debugging
     console.log("Updated eventContacts: ", eventContacts);
-    console.log("Updated boardContacts: ", boardContacts);
+    console.log("Coaches for the event: ", coaches);
 
     return (
         <ContactContext.Provider value={value}>

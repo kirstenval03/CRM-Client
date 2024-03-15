@@ -23,6 +23,7 @@ import AddContactForm from "../../components/AddContact";
 const ContactsPage = ({ contacts }) => {
   const navigate = useNavigate();
   const { eventId } = useParams();
+  const { coaches, fetchEventCoaches } = useContacts(); 
 
   // Add state to manage the visibility of the AddContactForm
   const [showAddContactForm, setShowAddContactForm] = useState(false);
@@ -38,6 +39,9 @@ const ContactsPage = ({ contacts }) => {
     importContacts,
     handleColorChange,
   } = useContacts();
+
+  
+    // STATE VARIABLES------------------------------
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("");
@@ -45,13 +49,17 @@ const ContactsPage = ({ contacts }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterColor, setFilterColor] = useState("");
   const [selectedContact, setSelectedContact] = useState(null);
+  const [filterCoachName, setFilterCoachName] = useState("");
 
+
+  //  CHANGE HANDLERS------------------------------
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
   };
 
   useEffect(() => {
     fetchContacts(eventId);
+    fetchEventCoaches(eventId);
   }, []);
 
   const handleChangePage = (event, newPage) => {
@@ -75,6 +83,11 @@ const ContactsPage = ({ contacts }) => {
   const handleColorFilterChange = (event) => {
     setFilterColor(event.target.value);
   };
+
+  const handleCoachNameFilterChange = (event) => {
+    setFilterCoachName(event.target.value);
+  }; // Handler for coach name filter
+
 
   if (!eventContacts || eventContacts.length === 0) {
     return (
@@ -143,7 +156,13 @@ const ContactsPage = ({ contacts }) => {
   };
 
   const sortedAndFilteredContacts = filterContactsByColor(
-    sortArray(filteredContacts, getComparator(order, orderBy)),
+    sortArray(
+      filteredContacts.filter(
+        (contact) =>
+          contact.coachName.toLowerCase().includes(filterCoachName.toLowerCase())
+      ),
+      getComparator(order, orderBy)
+    ),
     filterColor
   );
 
@@ -161,6 +180,9 @@ const ContactsPage = ({ contacts }) => {
     setSelectedContact(null);
   };
 
+
+  
+//  RETURN--------------------------------------------------
   return (
     <div style={{ margin: "10px" }}>
       <div className="contacts-topbar">
@@ -183,6 +205,7 @@ const ContactsPage = ({ contacts }) => {
         </div>
 
         <div className="filters-container">
+          
           <Select
             value={filterColor}
             onChange={handleColorFilterChange}
@@ -194,6 +217,21 @@ const ContactsPage = ({ contacts }) => {
             <MenuItem value="yellow">Yellow</MenuItem>
             <MenuItem value="red">Red</MenuItem>
           </Select>
+          
+          <Select
+            value={filterCoachName} // Set value to an empty string since you want to show all coaches by default
+            onChange={handleCoachNameFilterChange}
+            variant="outlined"
+            style={{ marginLeft: "10px" }}
+          >
+            <MenuItem value=" ">All Coaches</MenuItem>
+            {coaches.map((coach, index) => (
+              <MenuItem key={index} value={coach}>
+                {coach}
+              </MenuItem>
+            ))}
+          </Select>
+
           <TextField
             label="Search Contacts"
             variant="outlined"
@@ -201,6 +239,7 @@ const ContactsPage = ({ contacts }) => {
             onChange={handleSearchChange}
           />
         </div>
+        
       </div>
 
       {/* Render AddContactForm component conditionally */}
