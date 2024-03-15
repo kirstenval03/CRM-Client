@@ -300,8 +300,11 @@ const ContactsPage = ({ contacts }) => {
                   VIP
                 </TableSortLabel>
               </TableCell>
+              
               <TableCell>Coach</TableCell>
-              <TableCell>Status</TableCell>{" "}
+
+              <TableCell>Stage</TableCell>
+              <TableCell>Color</TableCell>{" "}
               {/* Add column for color selection */}
              
             </TableRow>
@@ -322,6 +325,7 @@ const ContactsPage = ({ contacts }) => {
                 <TableCell className="clickable">{contact.ticketRevenue}</TableCell>
                 <TableCell className="clickable">{contact.vip}</TableCell>
                 <TableCell className="clickable">{contact.coachName}</TableCell>
+                <TableCell className="clickable">{contact.pipelineStatus}</TableCell>
                 <TableCell>
                   <Select
                     value={contact.statusColor || ""}

@@ -163,6 +163,29 @@ const ContactDetails = ({ contact, eventId, onClose }) => {
             />
           </label>
           <br />
+          <label className="contactDetailsLabel">
+            Pipeline Status:
+            <select
+              className="contactDetailsInput"
+              name="pipelineStatus"
+              value={updatedContact.pipelineStatus}
+              onChange={handleChange}
+            >
+              <option value="Registrant">Registrant</option>
+              <option value="1st Call Booked">1st Call Booked</option>
+              <option value="1st Call Taken">1st Call Taken</option>
+              <option value="2nd Call Booked">2nd Call Booked</option>
+              <option value="2nd Call Taken">2nd Call Taken</option>
+              <option value="Applied">Applied</option>
+              <option value="Lost">Lost</option>
+              <option value="Working-post-call">Working-post-call</option>
+              <option value="Deposit">Deposit</option>
+              <option value="Enrolled">Enrolled</option>
+              <option value="Declined/Not Qualified">Declined/Not Qualified</option>
+              <option value="No Show/No Longer Interested">No Show/No Longer Interested</option>
+              {/* Add other options based on your enum */}
+            </select>
+            </label>
           {/* Other input fields */}
           <button className="contactDetailsButton" type="submit">Update</button>
         </form>
