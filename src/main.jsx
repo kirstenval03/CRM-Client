@@ -14,7 +14,7 @@ import { UserProvider } from './context/user.context.jsx';
 //BOARD
 import { BoardProvider } from './context/Board/board.jsx';
 import { ColumnProvider } from './context/Board/column.jsx';
-import { TaskProvider } from './context/Board/task.jsx';
+import { CardProvider } from './context/Board/card.jsx';
 
 //ACADEMY
 import { ModuleProvider } from './context/module.context.jsx'; 
@@ -41,11 +41,11 @@ function Main() {
                     <ContactProvider initialEventId={selectedEventId}>
                     <BoardProvider>
                       <ColumnProvider>
-                        <TaskProvider>
+                        <CardProvider>
 
                       <App handleEventSelection={handleEventSelection} />
                     
-                          </TaskProvider>
+                          </CardProvider>
                         </ColumnProvider>
                       </BoardProvider>
                     </ContactProvider>

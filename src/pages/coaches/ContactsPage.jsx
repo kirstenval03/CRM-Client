@@ -243,14 +243,14 @@ const ContactsPage = ({ contacts }) => {
               </MenuItem>
             ))}
           </Select>
-
+          
           <Select
             value={filterPipelineStatus}
             onChange={handlePipelineStatusFilterChange}
             variant="outlined"
             style={{ marginLeft: "10px" }}
           >
-            <MenuItem value="">All Statuses</MenuItem>
+            <MenuItem value=" ">All Statuses</MenuItem>
             {pipelineStatuses.map((status, index) => (
               <MenuItem key={index} value={status}>
                 {status}

@@ -24,8 +24,14 @@ export const BoardProvider = ({ children }) => {
   };
 
   // Function to create a new board
-  const createBoard = async (eventId, columns) => {
+  const createBoard = async (eventId, columnsData) => {
     try {
+      // Prepare columnsData with contacts
+      const columns = columnsData.map(column => {
+        const cards = column.contacts.map(contactId => ({ contactId }));
+        return { title: column.title, cards };
+      });
+
       const response = await axios.post(`${SERVER_URL}/board`, { eventId, columns });
       setBoard(response.data);
     } catch (error) {
@@ -34,9 +40,15 @@ export const BoardProvider = ({ children }) => {
   };
 
   // Function to update an existing board
-  const updateBoard = async (boardId, columns) => {
+  const updateBoard = async (boardId, columnsData) => {
     try {
-      const response = await axios.put(`${SERVER_URL}/board/board-update/${boardId}`, { columns });
+      // Prepare columnsData with contacts
+      const updatedColumns = columnsData.map(column => {
+        const cards = column.contacts.map(contactId => ({ contactId }));
+        return { title: column.title, cards };
+      });
+
+      const response = await axios.put(`${SERVER_URL}/board/board-update/${boardId}`, { columns: updatedColumns });
       setBoard(response.data);
     } catch (error) {
       console.error('Error updating board:', error);
@@ -56,3 +68,5 @@ export const BoardProvider = ({ children }) => {
     </BoardContext.Provider>
   );
 };
+
+export default BoardProvider;

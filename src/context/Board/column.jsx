@@ -13,9 +13,9 @@ export const ColumnProvider = ({ children }) => {
   const [columns, setColumns] = useState([]);
 
   // Function to fetch all columns within a board
-  const fetchEventColumns = async (eventId) => { // Update function name and parameter
+  const fetchEventColumns = async (eventId) => {
     try {
-      const response = await axios.get(`${SERVER_URL}/column/${eventId}`); // Update route path
+      const response = await axios.get(`${SERVER_URL}/column/${eventId}`);
       setColumns(response.data);
     } catch (error) {
       console.error('Error fetching event columns:', error);
@@ -23,9 +23,9 @@ export const ColumnProvider = ({ children }) => {
   };
 
   // Function to create a new column
-  const createColumn = async (eventId, title, indexPosition) => { // Update parameter
+  const createColumn = async (eventId, title, indexPosition) => {
     try {
-      const response = await axios.post(`${SERVER_URL}/column/event/${eventId}`, { title }); // Update route path
+      const response = await axios.post(`${SERVER_URL}/column/event/${eventId}`, { title });
       setColumns([...columns, response.data]);
     } catch (error) {
       console.error('Error creating column:', error);
@@ -33,9 +33,9 @@ export const ColumnProvider = ({ children }) => {
   };
 
   // Function to update an existing column
-  const updateColumn = async (eventId, columnId, title, indexPosition) => { // Update parameter
+  const updateColumn = async (eventId, columnId, title, indexPosition) => {
     try {
-      const response = await axios.put(`${SERVER_URL}/column/event/${eventId}/${columnId}`, { title }); // Update route path
+      const response = await axios.put(`${SERVER_URL}/column/event/${eventId}/${columnId}`, { title });
       const updatedColumns = columns.map((col) => (col._id === columnId ? response.data : col));
       setColumns(updatedColumns);
     } catch (error) {
@@ -44,9 +44,9 @@ export const ColumnProvider = ({ children }) => {
   };
 
   // Function to delete a column
-  const deleteColumn = async (eventId, columnId) => { // Update parameter
+  const deleteColumn = async (eventId, columnId) => {
     try {
-      await axios.delete(`${SERVER_URL}/column/event/${eventId}/${columnId}`); // Update route path
+      await axios.delete(`${SERVER_URL}/column/event/${eventId}/${columnId}`);
       const updatedColumns = columns.filter((col) => col._id !== columnId);
       setColumns(updatedColumns);
     } catch (error) {
@@ -58,7 +58,7 @@ export const ColumnProvider = ({ children }) => {
     <ColumnContext.Provider
       value={{
         columns,
-        fetchEventColumns, 
+        fetchEventColumns,
         createColumn,
         updateColumn,
         deleteColumn,
@@ -68,3 +68,5 @@ export const ColumnProvider = ({ children }) => {
     </ColumnContext.Provider>
   );
 };
+
+export default ColumnProvider;
