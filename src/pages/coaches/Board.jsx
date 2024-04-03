@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useContacts } from "../../context/contact.context";
-import { Grid, Paper, Typography, Card, CardContent, Button } from "@mui/material";
+import {
+  Grid,
+  Paper,
+  Typography,
+  Card,
+  CardContent,
+  Button,
+} from "@mui/material";
 import { useParams } from "react-router-dom";
 import ContactDetails from "../../components/ContactDetails";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -50,56 +57,89 @@ const BoardView = () => {
     red: "#F4CCCC",
   };
 
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const { source, destination } = result;
+    const updatedColumns = [...columns];
+    const sourceColumn = updatedColumns.find(col => col.title === source.droppableId);
+    const destColumn = updatedColumns.find(col => col.title === destination.droppableId);
+    const [removed] = sourceColumn.contacts.splice(source.index, 1);
+    destColumn.contacts.splice(destination.index, 0, removed);
+    setColumns(updatedColumns);
+  };
+
   return (
-    <div className="board-container">
-      <div className="columns-container">
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="board-container">
         {columns.map((column, columnIndex) => (
-          <div key={columnIndex} className="column">
-            <Paper elevation={3} style={{ padding: "10px", minHeight: "200px" }}>
-              <Typography variant="h6">{column.title}</Typography>
-              <div className="column-content">
-                {column.contacts.map((contact, contactIndex) => (
-                  <Card
-                    key={contact._id}
-                    style={{ 
-                      marginBottom: "10px", 
-                      cursor: "pointer", 
-                      backgroundColor: pastelColors[contact.statusColor] || "" // Use pastel colors
-                    }}
-                    onClick={() => handleContactClick(contact)}
-                  >
-                    <CardContent>
-                      <Typography variant="body1">
-                        {contact.firstName} {contact.lastName}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                ))}
+          <Droppable key={columnIndex} droppableId={column.title}>
+            {(provided, snapshot) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="column"
+                style={{
+                  overflowY: snapshot.isDraggingOver ? "scroll" : "auto",
+                  height: "100%",
+                }}
+              >
+                <Paper elevation={3} style={{ padding: "10px", minHeight: "200px" }}>
+                  <Typography variant="h6">{column.title}</Typography>
+                  <div className="column-content">
+                    {column.contacts.map((contact, contactIndex) => (
+                      <Draggable key={contact._id} draggableId={contact._id} index={contactIndex}>
+                        {(provided) => (
+                          <Card
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={{
+                              marginBottom: "10px",
+                              cursor: "pointer",
+                              backgroundColor: pastelColors[contact.statusColor] || "",
+                            }}
+                            onClick={() => handleContactClick(contact)}
+                          >
+                            <CardContent>
+                              <Typography variant="body1">
+                                {contact.firstName} {contact.lastName}
+                              </Typography>
+                            </CardContent>
+                          </Card>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                </Paper>
               </div>
-            </Paper>
-          </div>
+            )}
+          </Droppable>
         ))}
-      </div>
-      {selectedContact && (
-        <div className="overlay" onClick={handleCloseContactDetails}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <ContactDetails
-              contact={selectedContact}
-              eventId={eventId}
-              onClose={handleCloseContactDetails}
-            />
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleCloseContactDetails}
-              style={{ position: "absolute", top: "10px", right: "10px" }}
-            >
-              Close
-            </Button>
+        {selectedContact && (
+          <div className="overlay" onClick={handleCloseContactDetails}>
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
+              <ContactDetails
+                contact={selectedContact}
+                eventId={eventId}
+                onClose={handleCloseContactDetails}
+              />
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleCloseContactDetails}
+                style={{ position: "absolute", top: "10px", right: "10px" }}
+              >
+                Close
+              </Button>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </DragDropContext>
   );
 };
 

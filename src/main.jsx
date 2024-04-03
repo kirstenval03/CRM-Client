@@ -30,7 +30,7 @@ function Main() {
   };
 
   return (
-    <React.StrictMode>
+    // <React.StrictMode>
       <BrowserRouter>
         <AuthProvider>
           <UserProvider>
@@ -56,7 +56,7 @@ function Main() {
           </UserProvider>
         </AuthProvider>
       </BrowserRouter>
-    </React.StrictMode>
+    // </React.StrictMode>
   );
 }
 
