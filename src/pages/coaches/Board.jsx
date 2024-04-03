@@ -3,6 +3,7 @@ import { useContacts } from "../../context/contact.context";
 import { Grid, Paper, Typography, Card, CardContent, Button } from "@mui/material";
 import { useParams } from "react-router-dom";
 import ContactDetails from "../../components/ContactDetails";
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const BoardView = () => {
   const { eventId } = useParams();
