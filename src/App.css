@@ -448,3 +448,16 @@ CONTACTS PAGE */
 .contact-card {
   cursor: pointer;
 }
+
+/* Your CSS file or style block */
+.green {
+  background-color: #D9EAD3;
+}
+
+.yellow {
+  background-color: #FFFDCC;
+}
+
+.red {
+  background-color: #F4CCCC;
+}

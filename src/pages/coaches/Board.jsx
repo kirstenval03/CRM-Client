@@ -43,6 +43,12 @@ const BoardView = () => {
     setSelectedContact(null);
   };
 
+  const pastelColors = {
+    green: "#D9EAD3",
+    yellow: "#FFFDCC",
+    red: "#F4CCCC",
+  };
+
   return (
     <div className="board-container">
       <div className="columns-container">
@@ -54,7 +60,11 @@ const BoardView = () => {
                 {column.contacts.map((contact, contactIndex) => (
                   <Card
                     key={contact._id}
-                    className="contact-card"
+                    style={{ 
+                      marginBottom: "10px", 
+                      cursor: "pointer", 
+                      backgroundColor: pastelColors[contact.statusColor] || "" // Use pastel colors
+                    }}
                     onClick={() => handleContactClick(contact)}
                   >
                     <CardContent>
