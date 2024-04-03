@@ -70,7 +70,7 @@ const ContactsPage = ({ contacts }) => {
   };
 
   const handleSwitchToBoardView = () => {
-    navigate(`/contact/board/${eventId}`);
+    navigate(`/board/${eventId}`);
   };
 
   const handleSort = (property) => {

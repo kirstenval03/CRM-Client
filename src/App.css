@@ -417,3 +417,34 @@ CONTACTS PAGE */
 .add-contact-form-container button:hover {
   background-color: #45a049;
 }
+
+.board-container {
+  display: flex;
+  overflow-x: auto;
+}
+
+/* BoardView.css */
+
+.columns-container {
+  display: flex;
+  overflow-x: auto; /* Enable horizontal scrolling for columns */
+  max-width: 100%; /* Ensure the container takes full width */
+}
+
+.column {
+  flex: 0 0 auto;
+  margin-right: 20px; /* Adjust as needed */
+  max-height: calc(100vh - 100px); /* Adjust the max height as needed */
+  overflow-y: auto; /* Enable vertical scrolling for columns */
+}
+
+.column-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* Remove max-height and overflow-y from here */
+}
+
+.contact-card {
+  cursor: pointer;
+}

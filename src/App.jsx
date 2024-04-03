@@ -26,6 +26,8 @@ import ContactsPage from "./pages/coaches/ContactsPage"; // Import the ContactsP
 import LinksPage from "./pages/coaches/linksPage";
 import KanbanBoardPage from "./pages/coaches/KanbanBoard";
 
+import BoardView from "./pages/coaches/Board";
+
 // ACADEMY
 import AcademyDashboard from "./pages/academy/academyDashboard";
 import AcademyModules from "./pages/academy/academyModules";
@@ -89,7 +91,7 @@ function App() {
            <Route path="/events" element={<EventsPage/>}/>
            <Route path="/contact/:eventId" element={<ContactsPage />} />
            <Route path="/links/:eventId" element={<LinksPage />} />
-           <Route path="/contact/board/:eventId" element={<KanbanBoardPage />} />
+           <Route path="/board/:eventId" element={<BoardView />} />
 
 
           {/* Add Academy-related routes */}
