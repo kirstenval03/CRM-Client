@@ -14,7 +14,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const BoardView = () => {
   const { eventId } = useParams();
-  const { eventContacts } = useContacts();
+  const { eventContacts, updateContact } = useContacts(); // Import updateContact from context
   const [columns, setColumns] = useState([]);
   const [selectedContact, setSelectedContact] = useState(null);
 
@@ -61,14 +61,25 @@ const BoardView = () => {
     if (!result.destination) {
       return;
     }
-
+  
     const { source, destination } = result;
     const updatedColumns = [...columns];
-    const sourceColumn = updatedColumns.find(col => col.title === source.droppableId);
-    const destColumn = updatedColumns.find(col => col.title === destination.droppableId);
-    const [removed] = sourceColumn.contacts.splice(source.index, 1);
-    destColumn.contacts.splice(destination.index, 0, removed);
+    const sourceColumn = updatedColumns.find((col) => col.title === source.droppableId);
+    const destColumn = updatedColumns.find((col) => col.title === destination.droppableId);
+  
+    // Get the dragged contact
+    const draggedContact = sourceColumn.contacts[source.index];
+    
+    // Remove the dragged contact from the source column
+    sourceColumn.contacts.splice(source.index, 1);
+  
+    // Insert the dragged contact into the destination column at the correct index
+    destColumn.contacts.splice(destination.index, 0, draggedContact);
+  
     setColumns(updatedColumns);
+  
+    // Call the updateContact function to update the contact in the backend
+    updateContact(eventId, draggedContact._id, { pipelineStatus: destColumn.title });
   };
 
   return (

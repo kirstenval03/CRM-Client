@@ -16,7 +16,7 @@
     "@mui/material": "^5.15.0",
     "@mui/x-data-grid": "^6.18.5",
     "@mui/x-data-grid-pro": "^6.18.7",
-    "@nivo/pie": "^0.84.0",
+    "@nivo/pie": "^0.85.1",
     "@vimeo/player": "^2.21.0",
     "axios": "^1.6.2",
     "chart.js": "^4.4.1",
