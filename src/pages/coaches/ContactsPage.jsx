@@ -167,15 +167,16 @@ const ContactsPage = ({ contacts }) => {
 
   const sortedAndFilteredContacts = filterContactsByColor(
     sortArray(
-      filteredContacts.filter(
-        (contact) =>
-          contact.coachName.toLowerCase().includes(filterCoachName.toLowerCase()) &&
-          contact.pipelineStatus.toLowerCase().includes(filterPipelineStatus.toLowerCase())
-      ),
+      filteredContacts.filter((contact) => {
+        const hasCoachName = contact.coachName && contact.coachName.toLowerCase().includes(filterCoachName.toLowerCase());
+        const hasPipelineStatus = contact.pipelineStatus && contact.pipelineStatus.toLowerCase().includes(filterPipelineStatus.toLowerCase());
+        return hasCoachName && hasPipelineStatus;
+      }),
       getComparator(order, orderBy)
     ),
     filterColor
   );
+  
   
   
 

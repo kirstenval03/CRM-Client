@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useContacts } from "../../context/contact.context";
+import { useNavigate } from "react-router-dom";
 import {
   Grid,
   Paper,
@@ -13,6 +14,7 @@ import ContactDetails from "../../components/ContactDetails";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const BoardView = () => {
+  const navigate = useNavigate();
   const { eventId } = useParams();
   const { eventContacts, updateContact } = useContacts(); // Import updateContact from context
   const [columns, setColumns] = useState([]);
@@ -81,9 +83,16 @@ const BoardView = () => {
     // Call the updateContact function to update the contact in the backend
     updateContact(eventId, draggedContact._id, { pipelineStatus: destColumn.title });
   };
+  
+  const handleRedirectToContacts = () => {
+    navigate(`/contact/${eventId}`);
+  };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
+      <Button variant="contained" color="primary" onClick={handleRedirectToContacts}>
+        Back to Table View
+      </Button>
       <div className="board-container">
         {columns.map((column, columnIndex) => (
           <Droppable key={columnIndex} droppableId={column.title}>
@@ -92,12 +101,15 @@ const BoardView = () => {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 className="column"
-                style={{
-                  overflowY: snapshot.isDraggingOver ? "scroll" : "auto",
-                  height: "100%",
-                }}
               >
-                <Paper elevation={3} style={{ padding: "10px", minHeight: "200px" }}>
+                <Paper
+                  elevation={3}
+                  style={{
+                    padding: "10px",
+                    minHeight: "200px",
+                    overflowY: "auto", // Add overflowY style to Paper component
+                  }}
+                >
                   <Typography variant="h6">{column.title}</Typography>
                   <div className="column-content">
                     {column.contacts.map((contact, contactIndex) => (
@@ -155,3 +167,4 @@ const BoardView = () => {
 };
 
 export default BoardView;
+
